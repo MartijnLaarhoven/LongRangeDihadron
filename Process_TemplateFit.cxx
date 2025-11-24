@@ -393,6 +393,14 @@ VnUnit* TemplateFit(Bool_t isNch, InputUnit templ, InputUnit data, Bool_t cn2Tov
     std::string splitName = "Mult";
     if (!isNch) splitName = "Cent";
 
+    // Set collisionSystemName for plotting based on dataset prefix (minimal, local change).
+    // OLD: collisionSystemName was set globally at Process start and not updated per-dataset
+    if (templ.fileNameSuffix.find("LHC25ae") == 0 || data.fileNameSuffix.find("LHC25ae") == 0) {
+        collisionSystemName = "O-O";
+    } else if (templ.fileNameSuffix.find("LHC25af") == 0 || data.fileNameSuffix.find("LHC25af") == 0) {
+        collisionSystemName = "Ne-Ne";
+    }
+
     TFile* templatefile = new TFile(Form("./ProcessOutput/BootstrapSample_%s_%s_%d_%d_%s.root", templ.fileNameSuffix.c_str(), splitName.c_str(), templ.minRange, templ.maxRange, DihadronCorrTypeName[templ.corrType].c_str()), "READ");
     if (!templatefile || !templatefile->IsOpen()) {
         std::cerr << "Cannot open template file: " << Form("./ProcessOutput/BootstrapSample_%s_%s_%d_%d_%s.root", templ.fileNameSuffix.c_str(), splitName.c_str(), templ.minRange, templ.maxRange, DihadronCorrTypeName[templ.corrType].c_str()) << std::endl;
@@ -610,98 +618,18 @@ void RooTempFitter(TH1 *lm, TH1 *hm, std::vector<Double_t>& fParamVal, std::vect
         std::cerr << "Null pointer to histogram" << std::endl;
         return;
     }
-
-    // quick diagnostics and sanitization before fitting
-    std::cout << "[FitDiag] lm=" << (lm?lm->GetName():"NULL") << " entries=" << (lm?lm->GetEntries():0) << " integral=" << (lm?lm->Integral():0) << std::endl;
-    std::cout << "[FitDiag] hm=" << (hm?hm->GetName():"NULL") << " entries=" << (hm?hm->GetEntries():0) << " integral=" << (hm?hm->Integral():0) << std::endl;
-    if (!hm || hm->GetEntries() == 0) {
-        std::cout << "[FitDiag] No data in hm, skipping fit." << std::endl;
-        return;
-    }
-
-    // ensure bin errors are finite and non-zero to help Hessian calculation
-    for (int ib=1; ib<=hm->GetNbinsX(); ++ib) {
-        double err = hm->GetBinError(ib);
-        double val = hm->GetBinContent(ib);
-        if (!TMath::Finite(err) || err == 0.) {
-            double fallback = (val > 0.) ? sqrt(val) : 1.0;
-            hm->SetBinError(ib, fallback);
-        }
-    }
-
     //Initialize fitter with given projections
     TemplateFitter *ft = new TemplateFitter(hm);
-    // Print simple error statistics to diagnose overly-small bin errors
-    double minPosErr = 1e300, maxErr = 0, sumErr = 0;
-    int zeroErrCount = 0;
-    int nbins = hm->GetNbinsX();
-    for (int ib=1; ib<=nbins; ++ib) {
-        double err = hm->GetBinError(ib);
-        if (!TMath::Finite(err) || err <= 0) {
-            ++zeroErrCount;
-            continue;
-        }
-        minPosErr = std::min(minPosErr, err);
-        maxErr = std::max(maxErr, err);
-        sumErr += err;
-    }
-    double meanErr = (nbins-zeroErrCount)>0 ? sumErr / (nbins-zeroErrCount) : 0;
-    if (minPosErr>1e200) minPosErr = 0;
-    std::cout << "[FitDiag] hm error stats: bins=" << nbins << " zeroErrBins=" << zeroErrCount << " minPosErr=" << minPosErr << " meanErr=" << meanErr << " maxErr=" << maxErr << std::endl;
     //Setting up variable ( = delta phi, or just "x"):
     ft->AddVariable("x", "x", -TMath::Pi()/2.0, 1.5*TMath::Pi());
 
     if (!kRefit){
-    // Pb-Pb initial value (use data-driven initial guess for Ga and Fa)
-    // OLD: double guessGa = hm->Integral();
-    // OLD: double guessFa = hm->GetMaximum();
-    // Use per-bin average for Ga (total integral is often large because it's a sum over bins/samples)
-    double guessGa = 0.;
-    int nBinsGa = hm->GetNbinsX();
-    if (nBinsGa > 0) guessGa = hm->Integral() / double(nBinsGa);
-    double guessFa = hm->GetMaximum();
-    // safety fallbacks
-    if (!TMath::Finite(guessGa) || guessGa <= 0.) guessGa = 1.0;
-    if (!TMath::Finite(guessFa) || guessFa <= 0.) guessFa = 1.0;
-    // extra diagnostics: print simple template/data means to help understand scale
-    double mean_hm = hm->GetMean();
-    double mean_lm = lm->GetMean();
-    std::cout << "[FitDiag] pre-fit means: hm_mean=" << mean_hm << " lm_mean=" << mean_lm << " hm_max=" << hm->GetMaximum() << " lm_max=" << lm->GetMaximum() << std::endl;
-    // OLD: double mean_hm = hm->GetMean();
-    // OLD: double mean_lm = lm->GetMean();
-    // OLD: std::cout << "[FitDiag] pre-fit means: hm_mean=" << mean_hm << " lm_mean=" << mean_lm << " hm_max=" << hm->GetMaximum() << " lm_max=" << lm->GetMaximum() << std::endl;
-    // Option 1: normalize template (lm) to data (hm) mean to avoid large scale mismatches that force Fa/Ga runaway.
-    double scale_lm_to_hm = 1.0;
-    if (TMath::Finite(mean_hm) && TMath::Finite(mean_lm) && mean_lm > 0.) {
-        scale_lm_to_hm = mean_hm / mean_lm;
-        if (TMath::Finite(scale_lm_to_hm) && scale_lm_to_hm > 0.) {
-            lm->Scale(scale_lm_to_hm);
-            std::cout << "[FitDiag] Scaling lm by " << scale_lm_to_hm << " to match hm mean" << std::endl;
-        }
-    }
-    // Make parameter bounds data-driven and ensure min < max
-    double fa_min = TMath::Max(0.1, guessFa * 0.1);
-    double fa_max = TMath::Max(fa_min * 10.0, guessFa * 10.0);
-    double ga_min = TMath::Max(1.0, guessGa * 0.01);
-    double ga_max = TMath::Max(ga_min * 10.0, guessGa * 10.0);
-    // OLD: double fa_min = TMath::Max(0.1, guessFa * 0.1);
-    // OLD: double fa_max = TMath::Max(fa_min * 10.0, guessFa * 10.0);
-    // OLD: double ga_min = TMath::Max(1.0, guessGa * 0.01);
-    // OLD: double ga_max = TMath::Max(ga_min * 10.0, guessGa * 10.0);
-    // Tighten upper bounds relative to data-driven guesses to avoid runaway fits. Ceilings chosen conservatively.
-    double fa_ceiling = guessFa * 100.0; if (!TMath::Finite(fa_ceiling) || fa_ceiling <= 0.) fa_ceiling = 1e6;
-    double ga_ceiling = guessGa * 100.0; if (!TMath::Finite(ga_ceiling) || ga_ceiling <= 0.) ga_ceiling = 1e9;
-    if (fa_max > fa_ceiling) fa_max = fa_ceiling;
-    if (ga_max > ga_ceiling) ga_max = ga_ceiling;
-    // Fallback safety
-    if (!TMath::Finite(fa_min) || !TMath::Finite(fa_max) || fa_min <= 0 || fa_max <= fa_min) { fa_min = 0.1; fa_max = 1e4; }
-    if (!TMath::Finite(ga_min) || !TMath::Finite(ga_max) || ga_min <= 0 || ga_max <= ga_min) { ga_min = 1.0; ga_max = 1e9; }
-    ft->AddParameter("Fa","Fa", guessFa, fa_min, fa_max);
-    ft->AddParameter("Ga","Ga", guessGa, ga_min, ga_max); // data-driven bounds
-    ft->AddParameter("v2","v2",2e-3,-1.0,1.0);
-    ft->AddParameter("v3","v3",3e-4,-1.0,1.0);
-    ft->AddParameter("v4","v4",1.8e-4,-1.0,1.0);
-    std::cout << "[FitDiag] Fa bounds: [" << fa_min << ", " << fa_max << "] Ga bounds: [" << ga_min << ", " << ga_max << "]\n";
+        // Pb-Pb initial value
+        ft->AddParameter("Fa","Fa",4.5,0,100);
+        ft->AddParameter("Ga","Ga",23000,0,100000);
+        ft->AddParameter("v2","v2",4e-3,-1.0,1.0);
+        ft->AddParameter("v3","v3",6e-4,-1.0,1.0);
+        ft->AddParameter("v4","v4",1.8e-4,-1.0,1.0);
         // ft->AddParameter("Fa","Fa",4.5,4.,1e3);
         // ft->AddParameter("Ga","Ga",30000,28350.,1e10);
         // ft->AddParameter("v2","v2",4e-3,0.0015,1.0);
@@ -723,146 +651,13 @@ void RooTempFitter(TH1 *lm, TH1 *hm, std::vector<Double_t>& fParamVal, std::vect
         ft->AddParameter("v3","v3",fParamVal[1],fParamVal[1]-0.0002,fParamVal[1]+0.0002);
     }
 
-    // print initial parameter guesses for debugging
-    std::cout << "[FitDiag] initial guesses: Fa=" << ft->getVal(0) << " Ga=" << ft->getVal(1) << " v2=" << ft->getVal(2) << std::endl;
-
     //Construct fit function
-    // OLD: FunctionObject *fobj = new TemplateFunction(lm);
-    // OLD: ft->SetFitFunction(fobj);
-    // OLD: single-step fit used previously:
-    // OLD: Int_t dummy = ft->Fit(0);
-    //Perform fit using a two-step procedure to improve stability. If the fit
-    //appears numerically unstable (non-finite errors, huge errors, sentinel
-    //values), retry with inflated bin errors. This loop is low-risk and keeps
-    //the original behavior as a fallback.
-    // OLD: const double errorMultipliers[] = {1.0, 2.0, 5.0, 10.0};
-    // Try a wider range of error inflation multipliers to rescue ill-conditioned fits.
-    // We keep the old sequence commented above for easy rollback.
-    const double errorMultipliers[] = {1.0, 2.0, 5.0, 10.0, 50.0, 100.0};
-    const int nAttempts = sizeof(errorMultipliers)/sizeof(errorMultipliers[0]);
-    bool fitAccepted = false;
-    Double_t bestF=0, bestFe=0, bestG=0, bestGe=0, bestv2=0, bestv2e=0, bestv3=0, bestv3e=0, bestv4=0, bestv4e=0;
-    for (int attempt=0; attempt < nAttempts && !fitAccepted; ++attempt) {
-        double emul = errorMultipliers[attempt];
-        std::cout << "[FitDiag] Attempt " << attempt+1 << " with error multiplier " << emul << std::endl;
-
-        // Make a temporary copy of hm with inflated bin errors for stability
-        TH1* hm_try = (TH1*)hm->Clone(Form("%s_try_errmul_%d", hm->GetName(), attempt));
-        for (int ib=1; ib<=hm_try->GetNbinsX(); ++ib) {
-            double err = hm_try->GetBinError(ib);
-            double val = hm_try->GetBinContent(ib);
-            if (!TMath::Finite(err) || err <= 0.) err = (val>0.)?sqrt(val):1.0;
-            hm_try->SetBinError(ib, err * emul);
-        }
-
-        TemplateFitter *ft_try = new TemplateFitter(hm_try);
-        //Setting up variable ( = delta phi, or just "x"):
-        ft_try->AddVariable("x", "x", -TMath::Pi()/2.0, 1.5*TMath::Pi());
-
-        // Add parameters (same logic as above)
-        if (!kRefit){
-            double guessGa = hm_try->Integral();
-            double guessFa = hm_try->GetMaximum();
-            if (!TMath::Finite(guessGa) || guessGa <= 0.) guessGa = 1.0;
-            if (!TMath::Finite(guessFa) || guessFa <= 0.) guessFa = 1.0;
-            double fa_min = TMath::Max(0.1, guessFa * 0.1);
-            double fa_max = TMath::Max(fa_min * 10.0, guessFa * 10.0);
-            double ga_min = TMath::Max(1.0, guessGa * 0.01);
-            double ga_max = TMath::Max(ga_min * 10.0, guessGa * 10.0);
-            if (!TMath::Finite(fa_min) || !TMath::Finite(fa_max) || fa_min <= 0 || fa_max <= fa_min) { fa_min = 0.1; fa_max = 1e4; }
-            if (!TMath::Finite(ga_min) || !TMath::Finite(ga_max) || ga_min <= 0 || ga_max <= ga_min) { ga_min = 1.0; ga_max = 1e9; }
-            ft_try->AddParameter("Fa","Fa", guessFa, fa_min, fa_max);
-            ft_try->AddParameter("Ga","Ga", guessGa, ga_min, ga_max);
-            ft_try->AddParameter("v2","v2",2e-3,-1.0,1.0);
-            ft_try->AddParameter("v3","v3",3e-4,-1.0,1.0);
-            ft_try->AddParameter("v4","v4",1.8e-4,-1.0,1.0);
-        }
-        else{
-            ft_try->AddParameter("Fa","Fa",fParamVal[3],fParamVal[3]-1,fParamVal[3]+1);
-            ft_try->AddParameter("Ga","Ga",fParamVal[4],fParamVal[4]-5,fParamVal[4]+5);
-            ft_try->AddParameter("v2","v2",fParamVal[0],fParamVal[0]-0.0002,fParamVal[0]+0.0002);
-            ft_try->AddParameter("v3","v3",fParamVal[1],fParamVal[1]-0.0002,fParamVal[1]+0.0002);
-        }
-
-        //Construct fit function
-        FunctionObject *fobj_try = new TemplateFunction(lm);
-        ft_try->SetFitFunction(fobj_try);
-
-        // Step 1: fit Fa and Ga while keeping v2/v3/v4 fixed
-        ft_try->SetConst(2, kTRUE);
-        ft_try->SetConst(3, kTRUE);
-        ft_try->SetConst(4, kTRUE);
-        ft_try->SetConst(0, kFALSE);
-        ft_try->SetConst(1, kFALSE);
-        Int_t ok1 = ft_try->Fit(0);
-
-        if (ok1) {
-            // Step 2: fix Fa,Ga and release v2,v3,v4
-            ft_try->SetConst(0, kTRUE);
-            ft_try->SetConst(1, kTRUE);
-            ft_try->SetConst(2, kFALSE);
-            ft_try->SetConst(3, kFALSE);
-            ft_try->SetConst(4, kFALSE);
-            Int_t ok2 = ft_try->Fit(0);
-            if (!ok2) {
-                std::cout << "[FitDiag] attempt " << attempt+1 << " step2 failed, keeping step1 results" << std::endl;
-            }
-        } else {
-            // fallback: try single-step fit on this attempt
-            std::cout << "[FitDiag] attempt " << attempt+1 << " step1 failed, trying single-step fit" << std::endl;
-            ft_try->SetConst(0, kFALSE); ft_try->SetConst(1, kFALSE); ft_try->SetConst(2, kFALSE); ft_try->SetConst(3, kFALSE); ft_try->SetConst(4, kFALSE);
-            Int_t dummy = ft_try->Fit(0);
-            if (!dummy) {
-                std::cout << "[FitDiag] attempt " << attempt+1 << " single-step also failed" << std::endl;
-            }
-        }
-
-        // Extract values
-        Double_t F_try   = ft_try->getVal(0);
-        Double_t Fe_try  = ft_try->getErr(0);
-        Double_t G_try   = ft_try->getVal(1);
-        Double_t Ge_try  = ft_try->getErr(1);
-        Double_t v2_try  = ft_try->getVal(2);
-        Double_t v2e_try = ft_try->getErr(2);
-        Double_t v3_try  = ft_try->getVal(3);
-        Double_t v3e_try = ft_try->getErr(3);
-        Double_t v4_try  = ft_try->getVal(4);
-        Double_t v4e_try = ft_try->getErr(4);
-
-    // Simple sanity checks: finite and reasonably sized values; errors must be positive
-    auto goodVal = [](double x){ return TMath::Finite(x) && fabs(x) < 1e12; };
-    auto goodErr = [](double e){ return TMath::Finite(e) && e > 1e-12 && e < 1e12; };
-    bool ok = goodVal(F_try) && goodErr(Fe_try) && goodVal(G_try) && goodErr(Ge_try)
-          && goodVal(v2_try) && goodErr(v2e_try) && goodVal(v3_try) && goodErr(v3e_try)
-          && goodVal(v4_try) && goodErr(v4e_try);
-
-        if (ok) {
-            fitAccepted = true;
-            bestF = F_try; bestFe = Fe_try; bestG = G_try; bestGe = Ge_try;
-            bestv2 = v2_try; bestv2e = v2e_try; bestv3 = v3_try; bestv3e = v3e_try; bestv4 = v4_try; bestv4e = v4e_try;
-            std::cout << "[FitDiag] Accepting fit from attempt " << attempt+1 << std::endl;
-        } else {
-            std::cout << "[FitDiag] Attempt " << attempt+1 << " produced unstable numbers; retrying with larger errors" << std::endl;
-        }
-
-        // cleanup
-        delete ft_try;
-        delete fobj_try;
-        delete hm_try;
-    }
-
-    if (!fitAccepted) {
-        std::cout << "[FitDiag] All fit attempts failed or produced unstable results; using last available values from fitter (may be invalid)" << std::endl;
-        // As a last resort, extract values from the original fitter `ft` if available
-        FunctionObject *fobj = new TemplateFunction(lm);
-        ft->SetFitFunction(fobj);
-        bestF   = ft->getVal(0); bestFe = ft->getErr(0);
-        bestG   = ft->getVal(1); bestGe = ft->getErr(1);
-        bestv2  = ft->getVal(2); bestv2e = ft->getErr(2);
-        bestv3  = ft->getVal(3); bestv3e = ft->getErr(3);
-        bestv4  = ft->getVal(4); bestv4e = ft->getErr(4);
-        delete fobj;
-    }
+    FunctionObject *fobj = new TemplateFunction(lm);
+    ft->SetFitFunction(fobj);
+    //Perform fit:
+    printf("About to fit\n");
+    Int_t dummy = ft->Fit(0); //Do not draw performance at this point. Return value of Fit() is false if no base is set.
+    if(!dummy) return;
 
     Double_t F   = ft->getVal(0); //0 for F, 1 for G, 2 for v2, 3 for v3, 4 for v4
     Double_t Fe  = ft->getErr(0);
@@ -1151,3 +946,4 @@ void PlotFitting(TH1 *lm, TH1 *hm, Bool_t isNch, std::string fileSuffix, Int_t m
     delete line;
   
 }
+
