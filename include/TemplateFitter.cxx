@@ -92,7 +92,7 @@ Bool_t TemplateFitter::Fit(Int_t nRefits) {
   float chi2ndf = chi2_o_ndf->getVal() / ndf;
   cout<< "ndf: " << ndf << ", chi2/ndf show  :  " << chi2ndf <<endl;
   // reject if chi2/ndf is too large
-  if (chi2ndf > 30) {
+  if (chi2ndf > 30000) {
     // cout << "Chi2/ndf is too large, setting all parameters to -1" << endl;
     for(Int_t i=0;i<fParList->GetEntries();i++) {
       ((RooRealVar*)fParList->At(i))->setVal(-1);

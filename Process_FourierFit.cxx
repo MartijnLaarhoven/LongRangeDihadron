@@ -117,10 +117,10 @@ void Process_FourierFit() {
     // {InputUnit("LHC25af_pass1_532067", kTPCFT0C, 0, 10)}, 
     // "LHC25af_pass1_532067"));
     configList.push_back(ConfigUnit(kCent, kPtDiffOn,
-    {InputUnit("LHC25af_pass1_532067", kTPCFT0A, 0, 10)}, 
+    {InputUnit("LHC25af_pass1_532067", kTPCFT0A, 0, 20)}, 
     "LHC25af_pass1_532067"));
     configList.push_back(ConfigUnit(kCent, kPtDiffOn,
-    {InputUnit("LHC25af_pass1_532067", kTPCFT0C, 0, 10)}, 
+    {InputUnit("LHC25af_pass1_532067", kTPCFT0C, 0, 20)}, 
     "LHC25af_pass1_532067"));
 
     for (auto config : configList) {

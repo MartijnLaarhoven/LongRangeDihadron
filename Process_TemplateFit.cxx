@@ -108,31 +108,26 @@ void Process_TemplateFit() {
 
     collisionSystemName = "Ne-Ne";
     kOutputVnDelta = true;
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass1_521668", kTPCFT0A, 80, 100), 
-    // {InputUnit("LHC25af_pass1_521669", kTPCFT0A, 0, 5), InputUnit("LHC25af_pass1_521669", kTPCFT0A, 5, 10)}, 
-    // "LHC25af_pass1_521668"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass1_532068", kTPCFT0A, 80, 100), 
-    // {InputUnit("LHC25af_pass1_532067", kTPCFT0A, 0, 10)}, 
-    // "LHC25af_pass1_532068"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass1_532068", kTPCFT0C, 80, 100), 
-    // {InputUnit("LHC25af_pass1_532067", kTPCFT0C, 0, 10)}, 
-    // "LHC25af_pass1_532068"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass1_531635", kFT0AFT0C, 80, 100), 
-    // {InputUnit("LHC25af_pass1_531635", kFT0AFT0C, 0, 10)}, 
-    // "LHC25af_pass1_531635"));
+    // Ne-Ne 
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
     {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
     "LHC25af_pass2_554625"));
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
     {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
+    "LHC25af_pass2_554625"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
+    "LHC25af_pass2_554625"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
     "LHC25af_pass2_554625"));
     // O-O
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_557662", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_559559", kFT0AFT0C, 0, 20)}, 
-    "LHC25ae_pass2_557662"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_557662", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_559559", kFT0AFT0C, 0, 20)}, 
-    "LHC25ae_pass2_557662"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 80, 100), 
+    {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
+    "LHC25ae_pass2_561907"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 80, 100), 
+    {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
+    "LHC25ae_pass2_561907"));
     // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass1_537548", kFT0AFT0C, 80, 100), 
     // {InputUnit("LHC25af_pass1_537547", kFT0AFT0C, 0, 20)}, 
     // "LHC25af_pass1_537548"));
@@ -618,6 +613,87 @@ void RooTempFitter(TH1 *lm, TH1 *hm, std::vector<Double_t>& fParamVal, std::vect
         std::cerr << "Null pointer to histogram" << std::endl;
         return;
     }
+    // Option: inflate or regularize per-bin errors at runtime to stabilize fits.
+    // Controlled via environment variables (no code edits needed):
+    // LR_ERROR_SCALE  - multiplicative factor applied to all bin errors (default 1.0)
+    // LR_SYS_FRAC     - fractional systematic added in quadrature (e.g. 0.01 = 1%% of bin content)
+    // LR_ERROR_FLOOR  - minimum absolute error allowed per bin (default 1e-6)
+    {
+        const char* es = getenv("LR_ERROR_SCALE");
+        const char* sf = getenv("LR_SYS_FRAC");
+        const char* ef = getenv("LR_ERROR_FLOOR");
+        double envScale = es ? atof(es) : 1.0;
+        double sysFrac = sf ? atof(sf) : 0.0;
+        double errFloor = ef ? atof(ef) : 1e-6;
+        if (!TMath::Finite(envScale) || envScale <= 0) envScale = 1.0;
+        if (!TMath::Finite(sysFrac) || sysFrac < 0) sysFrac = 0.0;
+        if (!TMath::Finite(errFloor) || errFloor < 0) errFloor = 1e-6;
+        if (envScale != 1.0 || sysFrac != 0.0 || errFloor != 1e-6) {
+            std::cout << "[FitDiag] Applying runtime error regularization: scale=" << envScale << " sysFrac=" << sysFrac << " floor=" << errFloor << std::endl;
+            int nb = hm->GetNbinsX();
+            for (int ib = 1; ib <= nb; ++ib) {
+                double err = hm->GetBinError(ib);
+                double val = hm->GetBinContent(ib);
+                if (!TMath::Finite(err) || err <= 0) err = (val > 0) ? sqrt(val) : 1.0;
+                if (sysFrac > 0.0) {
+                    double sys = fabs(val) * sysFrac;
+                    err = sqrt(err*err + sys*sys);
+                }
+                err *= envScale;
+                if (!TMath::Finite(err) || err < errFloor) err = errFloor;
+                hm->SetBinError(ib, err);
+            }
+        }
+    }
+    // Quick diagnostics: print means/max to help spot scale mismatches
+    double hm_mean = hm->GetMean();
+    double lm_mean = lm->GetMean();
+    double hm_max = hm->GetMaximum();
+    double lm_max = lm->GetMaximum();
+    std::cout << "[FitDiag] pre-fit means: hm_mean=" << hm_mean << " lm_mean=" << lm_mean << " hm_max=" << hm_max << " lm_max=" << lm_max << std::endl;
+
+    // Normalize template histogram to data mean to make Fa around O(1) where possible.
+    if (TMath::Finite(lm_mean) && lm_mean != 0.0) {
+        double scale_lm_to_hm = (TMath::Finite(hm_mean) && hm_mean>0) ? (hm_mean / lm_mean) : 1.0;
+        if (TMath::Finite(scale_lm_to_hm) && fabs(scale_lm_to_hm - 1.0) > 1e-12) {
+            std::cout << "[FitDiag] Scaling lm by " << scale_lm_to_hm << " to match hm mean" << std::endl;
+            lm->Scale(scale_lm_to_hm);
+        }
+    }
+
+    // Estimate Fa and Ga via a weighted linear regression: hm ~= Fa * lm + Ga
+    double S = 0, Sx = 0, Sy = 0, Sxx = 0, Sxy = 0;
+    int nbins = hm->GetNbinsX();
+    for (int ib = 1; ib <= nbins; ++ib) {
+        double x = lm->GetBinContent(ib);
+        double y = hm->GetBinContent(ib);
+        double err = hm->GetBinError(ib);
+        double w = (err > 0 && TMath::Finite(err)) ? 1.0 / (err*err) : 1.0;
+        S += w;
+        Sx += w * x;
+        Sy += w * y;
+        Sxx += w * x * x;
+        Sxy += w * x * y;
+    }
+    double denom = (S * Sxx - Sx * Sx);
+    double guessFa = 1.0;
+    double guessGa = 0.0;
+    if (TMath::Finite(denom) && fabs(denom) > 1e-18) {
+        guessFa = (S * Sxy - Sx * Sy) / denom;
+        guessGa = (Sy - guessFa * Sx) / S;
+    } else {
+        // fallback: use ratio of maxima or means
+        if (lm_max > 0) guessFa = hm_max / lm_max;
+        else if (lm_mean > 0) guessFa = hm_mean / lm_mean;
+        guessGa = hm_mean - guessFa * lm_mean;
+    }
+    if (!TMath::Finite(guessFa)) guessFa = 1.0;
+    if (!TMath::Finite(guessGa)) guessGa = 0.0;
+    // Clamp guesses to reasonable ranges
+    double fa_floor = 1e-6;
+    if (fabs(guessFa) < fa_floor) guessFa = (guessFa >= 0) ? fa_floor : -fa_floor;
+    std::cout << "[FitDiag] Regression guess: Fa=" << guessFa << " Ga=" << guessGa << std::endl;
+
     //Initialize fitter with given projections
     TemplateFitter *ft = new TemplateFitter(hm);
     //Setting up variable ( = delta phi, or just "x"):
@@ -625,8 +701,30 @@ void RooTempFitter(TH1 *lm, TH1 *hm, std::vector<Double_t>& fParamVal, std::vect
 
     if (!kRefit){
         // Pb-Pb initial value
-        ft->AddParameter("Fa","Fa",4.5,0,100);
-        ft->AddParameter("Ga","Ga",23000,0,100000);
+        // OLD: ft->AddParameter("Fa","Fa",4.5,0,100);
+        // OLD: ft->AddParameter("Ga","Ga",23000,0,100000);
+        // Use regression-based initial guesses with data-driven bounds to improve conditioning
+        {
+            double fa_init = guessFa;
+            // Enforce Fa non-negative: physical template scale should be >= 0.
+            if (!TMath::Finite(fa_init)) fa_init = fa_floor;
+            if (fa_init < 0) {
+                std::cout << "[FitDiag] Regression gave negative Fa (" << guessFa << ") - using abs(fa) fallback." << std::endl;
+                fa_init = fabs(fa_init);
+            }
+            if (fa_init < fa_floor) fa_init = fa_floor;
+
+            double fa_min = 0.0; // do not allow negative Fa
+            double fa_max = std::max(fa_min + 1.0, fa_init * 10.0);
+            ft->AddParameter("Fa","Fa",fa_init,fa_min,fa_max);
+
+            double ga_init = guessGa;
+            if (!TMath::Finite(ga_init)) ga_init = 0.0;
+            double ga_span = std::max(1.0, fabs(ga_init)*2.0);
+            double ga_min = ga_init - ga_span;
+            double ga_max = ga_init + ga_span;
+            ft->AddParameter("Ga","Ga",ga_init,ga_min,ga_max);
+        }
         ft->AddParameter("v2","v2",4e-3,-1.0,1.0);
         ft->AddParameter("v3","v3",6e-4,-1.0,1.0);
         ft->AddParameter("v4","v4",1.8e-4,-1.0,1.0);
@@ -890,21 +988,52 @@ void PlotFitting(TH1 *lm, TH1 *hm, Bool_t isNch, std::string fileSuffix, Int_t m
     //   hResidual->SetBinContent(i, data/fit);
     //   hResidual->SetBinError(i, hm->GetBinError(i)/fit);
     // }
-    TH1D* hResidual = (TH1D*)hsubtract->Clone(Form("pull"));
-    double ymax_pull = 1, ymin_pull = 1;
-    for (int i = 1; i <= hResidual->GetXaxis()->GetNbins(); i++) {
-      double dat = hResidual->GetBinContent(i);
-      double err = hResidual->GetBinError(i);
-      // double lin = gCopy->GetPointY(i-1);
-      double lin = fit_p1m->Eval(hResidual->GetBinCenter(i));
-      hResidual->SetBinContent(i, dat/lin);
-      hResidual->SetBinError(i, err/lin);
-      ymin_pull = ymin_pull>(dat/lin)?(dat/lin):ymin_pull;
-      ymax_pull = ymax_pull<(dat/lin)?(dat/lin):ymax_pull;
-    }
-    ymin_pull = 1 - (1-ymin_pull) * 2;
-    ymax_pull = 1 + (ymax_pull-1) * 2;
-    hResidual->GetYaxis()->SetRangeUser(ymin_pull,ymax_pull);
+        TH1D* hResidual = (TH1D*)hsubtract->Clone(Form("pull"));
+        // OLD: TH1D* hResidual = (TH1D*)hsubtract->Clone(Form("pull"));
+        // Guard against Inf/NaN propagated from Data/Fit division. Compute per-bin
+        // Data/Fit only when the fit value is finite and non-zero. Expand the
+        // display range conservatively if values are degenerate.
+        double ymin_pull = 1e9, ymax_pull = -1e9;
+        for (int i = 1; i <= hResidual->GetXaxis()->GetNbins(); i++) {
+            double dat = hResidual->GetBinContent(i);
+            double err = hResidual->GetBinError(i);
+            double xcenter = hResidual->GetBinCenter(i);
+            double lin = fit_p1m->Eval(xcenter);
+            double ratio = 1.0;
+            double ratio_err = 0.0;
+            if (TMath::Finite(lin) && fabs(lin) > 1e-12) {
+                ratio = dat / lin;
+                if (TMath::Finite(err)) ratio_err = err / fabs(lin);
+            } else {
+                // If the fit value is zero/invalid, set a neutral ratio=1 and zero err
+                ratio = 1.0;
+                ratio_err = 0.0;
+            }
+            if (!TMath::Finite(ratio)) ratio = 1.0;
+            if (!TMath::Finite(ratio_err)) ratio_err = 0.0;
+            hResidual->SetBinContent(i, ratio);
+            hResidual->SetBinError(i, ratio_err);
+            if (ratio < ymin_pull) ymin_pull = ratio;
+            if (ratio > ymax_pull) ymax_pull = ratio;
+        }
+        // If we didn't find any finite values, fall back to a safe display range
+        if (!TMath::Finite(ymin_pull) || !TMath::Finite(ymax_pull) || ymax_pull <= ymin_pull) {
+            ymin_pull = 0.5;
+            ymax_pull = 1.5;
+        } else {
+            // Expand the range around 1.0 to make deviations visible, but keep a
+            // minimum padding to avoid zero-height pad warnings.
+            double mid = 1.0;
+            double lowDelta = mid - ymin_pull;
+            double highDelta = ymax_pull - mid;
+            double expandLow = TMath::Max(0.1, lowDelta * 2.0);
+            double expandHigh = TMath::Max(0.1, highDelta * 2.0);
+            ymin_pull = mid - expandLow;
+            ymax_pull = mid + expandHigh;
+        }
+        // Safety: ensure a non-zero delta to avoid TPad Resize warnings
+        if (ymax_pull - ymin_pull < 1e-6) { ymax_pull = ymin_pull + 1e-3; }
+        hResidual->GetYaxis()->SetRangeUser(ymin_pull,ymax_pull);
 
     // 配置残差图
     hResidual->SetMarkerStyle(20);

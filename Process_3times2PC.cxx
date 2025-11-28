@@ -95,7 +95,7 @@ void Process_3times2PC() {
     // {InputUnit("LHC25af_pass1_532068", kTPCFT0A, kTemplateFit, 0, 10), InputUnit("LHC25af_pass1_532068", kTPCFT0C, kTemplateFit, 0, 10), InputUnit("LHC25af_pass1_537547", kFT0AFT0C, kFourierFit, 0, 20)}, 
     // "LHC25af_pass1_537547"));
     configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
-    {InputUnit("LHC25af_pass1_532067", kTPCFT0A, kFourierFit, 0, 10), InputUnit("LHC25af_pass1_532067", kTPCFT0C, kFourierFit, 0, 10), InputUnit("LHC25af_pass1_537547", kFT0AFT0C, kFourierFit, 0, 20)}, 
+    {InputUnit("LHC25af_pass1_532067", kTPCFT0A, kFourierFit, 0, 20), InputUnit("LHC25af_pass1_532067", kTPCFT0C, kFourierFit, 0, 20), InputUnit("LHC25af_pass1_537547", kFT0AFT0C, kFourierFit, 0, 20)}, 
     "LHC25af_pass1_537547_kFourierFit"));
 
     for (auto config : configList) {

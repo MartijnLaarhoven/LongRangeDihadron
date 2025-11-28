@@ -35,22 +35,14 @@ void CreateBootstrapSample_PtDiff(std::string fileNameSuffix, Int_t corrType, Bo
 void Process_CreateBootstrapSample() {
 
     std::vector<InputUnit> inputList;
-    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0A, kCent, kPtDiffOff, 0, 10));
-    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
-    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0C, kCent, kPtDiffOff, 0, 10));
-    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
-    // inputList.push_back(InputUnit("LHC25af_pass1_531635", kFT0AFT0C, kCent, kPtDiffOff, 0, 10));
-    // inputList.push_back(InputUnit("LHC25af_pass1_531635", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-
-    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0A, kCent, kPtDiffOn, 0, 10));
-    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0A, kCent, kPtDiffOn, 80, 100));
-    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0C, kCent, kPtDiffOn, 0, 10));
-    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0C, kCent, kPtDiffOn, 80, 100));
-
+    // Ne-Ne
     inputList.push_back(InputUnit("LHC25af_pass2_556742", kFT0AFT0C, kCent, kPtDiffOff, 0, 5));
     inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_559559", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_557662", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_563812", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    // O-O
+    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
 
     for (auto input : inputList) {
         if (input.isPtdiff) {
