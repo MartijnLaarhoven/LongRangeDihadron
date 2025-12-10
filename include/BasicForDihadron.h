@@ -49,18 +49,21 @@ enum kDihadronCorrType {
     kTPCFT0A,
     kTPCFT0C,
     kFT0AFT0C,
+    kTPCTPC,       // TPC–TPC correlation (eta-split handled upstream)
     kNCorrType
 };
 
 std::map<int, std::string> DihadronCorrTypeName = {
     {kTPCFT0A, "TPC_FT0A"},
     {kTPCFT0C, "TPC_FT0C"},
-    {kFT0AFT0C, "FT0A_FT0C"}
+    {kFT0AFT0C, "FT0A_FT0C"},
+    {kTPCTPC, "TPC_TPC"},
 };
 
 std::map<int, std::vector<float>> DihadrondEtaRange = {
-    {kTPCFT0A,{-5.2, -3.2}},
-    {kTPCFT0C, {1.5, 3.5}},
+    {kTPCFT0A,{-6.2, -2.2}}, //-5.2,-3.2
+    {kTPCFT0C, {1.2, 4.}}, //1.5,3.5
+    {kTPCTPC, {0.8, 0.8}},
     // {kFT0AFT0C, {5.5, 8.5}}
     // cut edge of FT0A-FT0C
     {kFT0AFT0C, {6., 7.2}} //6.

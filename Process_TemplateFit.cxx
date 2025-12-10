@@ -109,25 +109,41 @@ void Process_TemplateFit() {
     collisionSystemName = "Ne-Ne";
     kOutputVnDelta = true;
     // Ne-Ne 
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
+    // "LHC25af_pass2_554625"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
+    // "LHC25af_pass2_554625"));
+    // tpc-ft0c
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
-    "LHC25af_pass2_554625"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
+    {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
     "LHC25af_pass2_554625"));
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
     {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
     "LHC25af_pass2_554625"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
-    "LHC25af_pass2_554625"));
+    // tpc-ft0c
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_571364"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_571364"));
+    // tpc-ft0a
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0A, 80, 100), 
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_571364"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0A, 80, 100), 
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_571364"));
     // O-O
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
-    "LHC25ae_pass2_561907"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
-    "LHC25ae_pass2_561907"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_561907"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_561907"));
+
     // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass1_537548", kFT0AFT0C, 80, 100), 
     // {InputUnit("LHC25af_pass1_537547", kFT0AFT0C, 0, 20)}, 
     // "LHC25af_pass1_537548"));
@@ -863,22 +879,22 @@ void PlotFitting(TH1 *lm, TH1 *hm, Bool_t isNch, std::string fileSuffix, Int_t m
     hm->Draw("same p");
 
     // 创建拟合曲线
-    const int pointBin = (int)hm->GetNbinsX();
-    Double_t CopyPointX[pointBin];
-    Double_t CopyPointY[pointBin];
-    for (int i=0; i<pointBin; ++i){
-      CopyPointX[i] = hm->GetBinCenter(i+1);
-      double x = hm->GetBinCenter(i+1);
-      // CopyPointY[i] = F*lm->GetBinContent(i+1)+G*(1+2*v21*cos(2*x)+2*v31*cos(3*x));
-      CopyPointY[i] = F*lm->GetBinContent(i+1)+G*(1+2*v21*cos(2*x)+2*v31*cos(3*x)+2*v41*cos(4*x));
-    };
-    TGraph* gCopy = new TGraph(pointBin,CopyPointX,CopyPointY);
+        const int pointBin = (int)hm->GetNbinsX();
+        std::vector<Double_t> CopyPointX(pointBin);
+        std::vector<Double_t> CopyPointY(pointBin);
+        for (int i=0; i<pointBin; ++i){
+            CopyPointX[i] = hm->GetBinCenter(i+1);
+            double x = hm->GetBinCenter(i+1);
+            // CopyPointY[i] = F*lm->GetBinContent(i+1)+G*(1+2*v21*cos(2*x)+2*v31*cos(3*x));
+            CopyPointY[i] = F*lm->GetBinContent(i+1)+G*(1+2*v21*cos(2*x)+2*v31*cos(3*x)+2*v41*cos(4*x));
+        };
+        TGraph* gCopy = new TGraph(pointBin, CopyPointX.data(), CopyPointY.data());
 
-    Double_t PeriPointY[pointBin];
-    for (int i=0; i<pointBin; ++i){
-      PeriPointY[i] = F*lm->GetBinContent(i+1) + G;
-    };
-    TGraph* gPeri = new TGraph(pointBin,CopyPointX,PeriPointY);
+        std::vector<Double_t> PeriPointY(pointBin);
+        for (int i=0; i<pointBin; ++i){
+            PeriPointY[i] = F*lm->GetBinContent(i+1) + G;
+        };
+        TGraph* gPeri = new TGraph(pointBin, CopyPointX.data(), PeriPointY.data());
 
     Double_t Y0Position = lm->GetXaxis()->FindBin(0.0);
     Double_t Y0 = lm->GetBinContent(Y0Position);

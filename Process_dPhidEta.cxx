@@ -51,25 +51,41 @@ void Process_dPhidEta() {
     std::vector<InputUnit> inputList;
     additionalSuffix = "";
 
-    collisionSystemName = "Ne-Ne";
+    collisionSystemName = "O-O";
+    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0A, kCent, kPtDiffOff, 0, 10));
+    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0C, kCent, kPtDiffOff, 0, 10));
+    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25af_pass1_531635", kFT0AFT0C, kCent, kPtDiffOff, 0, 10));
+    // inputList.push_back(InputUnit("LHC25af_pass1_531635", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
 
-    // Ne-Ne 0-5
-    inputList.push_back(InputUnit("LHC25af_pass2_556742", kFT0AFT0C, kCent, kPtDiffOff, 0, 5));
-    inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25af_pass2_556742", kFT0AFT0C, kCent, kPtDiffOff, 0, 5));
-    inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-    // Ne-Ne 0-20
+    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0A, kCent, kPtDiffOn, 0, 10));
+    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0A, kCent, kPtDiffOn, 80, 100));
+    // inputList.push_back(InputUnit("LHC25af_pass1_532067", kTPCFT0C, kCent, kPtDiffOn, 0, 10));
+    // inputList.push_back(InputUnit("LHC25af_pass1_532068", kTPCFT0C, kCent, kPtDiffOn, 80, 100));
+
+    // Ne-Ne
+    // ft0a-ft0c
     inputList.push_back(InputUnit("LHC25af_pass2_563812", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
     inputList.push_back(InputUnit("LHC25af_pass2_563812", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_565246", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
-    //inputList.push_back(InputUnit("LHC25af_pass2_", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
-    // O-O 0-20
-    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    // tpc-ft0c
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_571364", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_571364", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    // tpc-ft0a
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_571364", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_571364", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    // O-O
+    // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+  
     // inputList.push_back(InputUnit("LHC25af_pass1_537547", kFT0AFT0C, kCent, kPtDiffOn, 0, 20));
     // inputList.push_back(InputUnit("LHC25af_pass1_537548", kFT0AFT0C, kCent, kPtDiffOn, 80, 100));
     
