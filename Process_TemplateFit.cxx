@@ -1091,4 +1091,3 @@ void PlotFitting(TH1 *lm, TH1 *hm, Bool_t isNch, std::string fileSuffix, Int_t m
     delete line;
   
 }
-
