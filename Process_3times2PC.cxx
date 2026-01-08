@@ -91,16 +91,17 @@ void Process_3times2PC() {
     // configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
     // {InputUnit("LHC25af_pass1_532068", kTPCFT0A, kTemplateFit, 0, 10), InputUnit("LHC25af_pass1_532068", kTPCFT0C, kTemplateFit, 0, 10), InputUnit("LHC25af_pass1_537547", kFT0AFT0C, kFourierFit, 0, 20)}, 
     // "LHC25af_pass1_537547"));
+    // Use TemplateFit VnDelta files: LM=TPC-FT0C, MR=TPC-FT0A, LR=FT0A-FT0C
     configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
-    {InputUnit("LHC25af_pass2_565246", kTPCFT0A, kFourierFit, 0, 20), InputUnit("LHC25af_pass2_565246", kTPCFT0C, kFourierFit, 0, 20), InputUnit("LHC25af_pass2_565246", kTPCTPC, kFourierFit, 0, 20)}, 
-    "LHC25af_pass2_565246_kFourierFit"));
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0C, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_565246", kTPCFT0A, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_563812", kFT0AFT0C, kTemplateFit, 0, 20)}, 
+    "LHC25af_pass2_565246_kTemplateFit"));
     // TPC eta-split example: (LM) TPC_TPC eta>0.5, (MR) TPC_TPC eta<-0.5, (LR) cross eta>0.5 × eta<-0.5
     // Ensure you have produced matching VnDelta files with these suffixes upstream (TemplateFit/FourierFit).
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
-    {InputUnit("LHC25af_pass2_565246_EtaPos", kTPCTPC, kFourierFit, 0, 20),
-     InputUnit("LHC25af_pass2_565246_EtaNeg", kTPCTPC, kFourierFit, 0, 20),
-     InputUnit("LHC25af_pass2_565246_EtaPosEtaNeg", kTPCTPC, kFourierFit, 0, 20)},
-    "LHC25af_pass2_565246_TPCTPC_EtaSplit_kFourierFit"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    // {InputUnit("LHC25af_pass2_565246_EtaPos", kTPCTPC, kTemplateFit, 0, 20),
+    //  InputUnit("LHC25af_pass2_565246_EtaNeg", kTPCTPC, kTemplateFit, 0, 20),
+    //  InputUnit("LHC25af_pass2_565246_EtaPosEtaNeg", kTPCTPC, kTemplateFit, 0, 20)},
+    // "LHC25af_pass2_565246_TPCTPC_EtaSplit_kTemplateFit"));
 
     for (auto config : configList) {
         if (config.isPtDiff) {
