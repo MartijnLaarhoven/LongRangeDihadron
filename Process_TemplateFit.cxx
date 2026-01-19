@@ -116,26 +116,51 @@ void Process_TemplateFit() {
     // {InputUnit("LHC25af_pass2_556742", kFT0AFT0C, 0, 5)}, 
     // "LHC25af_pass2_554625"));
     // ft0a-ft0c
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
-    // {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
-    // "LHC25af_pass2_554625"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586466", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_586466", kFT0AFT0C, 0, 20)}, 
+    // "LHC25af_pass2_586466"));
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554625", kFT0AFT0C, 80, 100), 
     // {InputUnit("LHC25af_pass2_563812", kFT0AFT0C, 0, 20)}, 
     // "LHC25af_pass2_554625"));
     // tpc-ft0c
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0C, 80, 100), 
-    // {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
-    // "LHC25af_pass2_571364"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586466", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_586466", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_586466"));
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0C, 80, 100), 
     // {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
     // "LHC25af_pass2_571364"));
     // tpc-ft0a
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586466", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25af_pass2_586466", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_586466"));
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0A, 80, 100), 
     // {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
     // "LHC25af_pass2_571364"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0A, 80, 100), 
-    // {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
+    //innerring
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591069", kTPCFT0A, 80, 100), 
+    {InputUnit("LHC25af_pass2_591069", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_591069"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591069", kTPCFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_591069", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_591069"));
+    //outterring
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586466", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25af_pass2_586466", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_586466"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
     // "LHC25af_pass2_571364"));
+
+    //MC
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586594", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_586594", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_586594"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586594", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25af_pass2_586594", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_586594"));
+
+
+
     // tpc-tpc
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_554627", kTPCTPC, 80, 100), 
     // {InputUnit("LHC25af_pass2_554626", kTPCTPC, 0, 20)}, 
@@ -152,34 +177,56 @@ void Process_TemplateFit() {
     // {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
     // "LHC25ae_pass2_561907"));    
     // // tpc-ft0c
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_587867", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_575598"));
     //outterring
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_583826", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_583828", kTPCFT0C, 0, 20)}, 
-    "LHC25ae_pass2_583826"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_583826", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_583828", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_583826"));
     //innerring
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_584612", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_583824", kTPCFT0C, 0, 20)}, 
-    "LHC25ae_pass2_584612"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_573730", kTPCFT0C, 0, 20)}, 
-    "LHC25ae_pass2_575598"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_584612", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_583824", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_584612"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_573730", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_575598"));
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0C, 80, 100), 
     // {InputUnit("LHC25ae_pass2_572180", kTPCFT0C, 0, 20)}, 
     // "LHC25ae_pass2_575598"));    
     // // tpc-ft0a
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_587867", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_575598"));
     //outterring
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_583826", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25ae_pass2_583828", kTPCFT0A, 0, 20)}, 
-    "LHC25ae_pass2_583826"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_583826", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_583828", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_583826"));
     //innerring
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_584612", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25ae_pass2_583824", kTPCFT0A, 0, 20)}, 
-    "LHC25ae_pass2_584612"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_584612", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_583824", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_584612"));
 
+    //MC
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_586778", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_586778", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_586778"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_586778", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_586778", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_586778"));
+
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_588055", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_588055", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_588055"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_588055", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_588055", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_588055"));    
     
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25ae_pass2_573730", kTPCFT0A, 0, 20)}, 
-    "LHC25ae_pass2_575598"));
+
+
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_573730", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_575598"));
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_575598", kTPCFT0A, 80, 100), 
     // {InputUnit("LHC25ae_pass2_572180", kTPCFT0A, 0, 20)}, 
     // "LHC25ae_pass2_575598"));
