@@ -106,7 +106,14 @@ void Process_FourierFit() {
 
     collisionSystemName = "Ne-Ne";
     kOutputVnDelta = true;
-    
+    //old
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_565246"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_565246"));
+    //remap
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
     {InputUnit("LHC25af_pass2_591069", kTPCFT0A, 0, 20)}, 
     "LHC25af_pass2_591069"));

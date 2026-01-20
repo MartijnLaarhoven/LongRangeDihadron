@@ -58,6 +58,11 @@ void Process_dPhidEta() {
     // inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
     // inputList.push_back(InputUnit("LHC25af_pass2_563812", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25af_pass2_554625", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    //old
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
     // tpc-ft0c
     inputList.push_back(InputUnit("LHC25af_pass2_591069", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
     inputList.push_back(InputUnit("LHC25af_pass2_591069", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
