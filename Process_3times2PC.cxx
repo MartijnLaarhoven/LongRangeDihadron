@@ -54,8 +54,11 @@ struct ConfigUnit {
                 Printf("The input vector don't have a size of 3!");
                 return;
             }
-            // Allow arbitrary three-input combinations (e.g. TPC_EtaNeg×FT0C, TPC_EtaPos×FT0C, TPC_EtaNeg×TPC_EtaPos)
-            // OLD: enforced kTPCFT0A, kTPCFT0C, kFT0AFT0C ordering and types.
+            if (!(_dataList[0].corrType == kTPCFT0A && _dataList[1].corrType == kTPCFT0C && _dataList[2].corrType == kFT0AFT0C)) {
+                constructed = false;
+                Printf("This calculation only valid for the sequence of kTPCFT0A, kTPCFT0C, kFT0AFT0C");
+                return;
+            }
             if (!(_dataList[0].minRange == _dataList[1].minRange && _dataList[0].minRange == _dataList[2].minRange && _dataList[0].maxRange == _dataList[1].maxRange && _dataList[0].maxRange == _dataList[2].maxRange)) {
                 Printf("Warning: you are not using the same Cent/Nch range for one config:");
                 Printf("kTPCFT0A %d %d, kTPCFT0C %d %d, kFT0AFT0C %d %d", _dataList[0].minRange, _dataList[0].maxRange, _dataList[1].minRange, _dataList[1].maxRange, _dataList[2].minRange, _dataList[2].maxRange);
@@ -91,18 +94,9 @@ void Process_3times2PC() {
     // configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
     // {InputUnit("LHC25af_pass1_532068", kTPCFT0A, kTemplateFit, 0, 10), InputUnit("LHC25af_pass1_532068", kTPCFT0C, kTemplateFit, 0, 10), InputUnit("LHC25af_pass1_537547", kFT0AFT0C, kFourierFit, 0, 20)}, 
     // "LHC25af_pass1_537547"));
-    // Use TemplateFit VnDelta files: LM=TPC-FT0C, MR=TPC-FT0A, LR=FT0A-FT0C
-    // small O-O
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, 
-    {InputUnit("LHC25ae_pass2_575598", kTPCFT0C, kTemplateFit, 0, 20), InputUnit("LHC25ae_pass2_575598", kTPCFT0A, kTemplateFit, 0, 20), InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kTemplateFit, 0, 20)}, 
-    "LHC25ae_pass2_561907_kTemplateFit"));
-    // TPC eta-split example: (LM) TPC_TPC eta>0.5, (MR) TPC_TPC eta<-0.5, (LR) cross eta>0.5 × eta<-0.5
-    // Ensure you have produced matching VnDelta files with these suffixes upstream (TemplateFit/FourierFit).
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOn,
-    // {InputUnit("LHC25af_pass2_565246_EtaPos", kTPCTPC, kTemplateFit, 0, 20),
-    //  InputUnit("LHC25af_pass2_565246_EtaNeg", kTPCTPC, kTemplateFit, 0, 20),
-    //  InputUnit("LHC25af_pass2_565246_EtaPosEtaNeg", kTPCTPC, kTemplateFit, 0, 20)},
-    // "LHC25af_pass2_565246_TPCTPC_EtaSplit_kTemplateFit"));
+    {InputUnit("LHC25af_pass2_532067", kTPCFT0A, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_532067", kTPCFT0C, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_537547", kFT0AFT0C, kTemplateFit, 0, 20)}, 
+    "LHC25af_pass2_537547_kTemplateFit"));
 
     for (auto config : configList) {
         if (config.isPtDiff) {

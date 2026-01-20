@@ -136,20 +136,26 @@ void Process_TemplateFit() {
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0A, 80, 100), 
     // {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
     // "LHC25af_pass2_571364"));
-    //innerring
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591069", kTPCFT0A, 80, 100), 
     {InputUnit("LHC25af_pass2_591069", kTPCFT0A, 0, 20)}, 
     "LHC25af_pass2_591069"));
     configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591069", kTPCFT0C, 80, 100), 
     {InputUnit("LHC25af_pass2_591069", kTPCFT0C, 0, 20)}, 
     "LHC25af_pass2_591069"));
+    //innerring
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591387", kTPCFT0A, 80, 100), 
+    {InputUnit("LHC25af_pass2_591387", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_591387"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591387", kTPCFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_591387", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_591387"));
     //outterring
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586466", kTPCFT0A, 80, 100), 
-    // {InputUnit("LHC25af_pass2_586466", kTPCFT0A, 0, 20)}, 
-    // "LHC25af_pass2_586466"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_571364", kTPCFT0C, 80, 100), 
-    // {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
-    // "LHC25af_pass2_571364"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591389", kTPCFT0A, 80, 100), 
+    {InputUnit("LHC25af_pass2_591389", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_591389"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_591389", kTPCFT0C, 80, 100), 
+    {InputUnit("LHC25af_pass2_591389", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_591389"));
 
     //MC
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_586594", kTPCFT0C, 80, 100), 

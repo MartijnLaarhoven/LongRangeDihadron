@@ -67,15 +67,15 @@ void Process_dPhidEta() {
 
 
     //innerring
-    inputList.push_back(InputUnit("LHC25af_pass2_591069", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25af_pass2_591069", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25af_pass2_591069", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25af_pass2_591069", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_591387", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_591387", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_591387", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_591387", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
     //outterring
-    // inputList.push_back(InputUnit("LHC25af_pass2_586466", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
-    // inputList.push_back(InputUnit("LHC25af_pass2_586466", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
-    // inputList.push_back(InputUnit("LHC25af_pass2_565246", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
-    // inputList.push_back(InputUnit("LHC25af_pass2_571364", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_591389", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_591389", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_591389", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_591389", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
     // MC
     // inputList.push_back(InputUnit("LHC25af_pass2_586594", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25af_pass2_586594", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
@@ -952,4 +952,3 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
     std::cout << "Output file: " << Form("./ProcessOutput/PtDiff/Mixed_%s%s_%s_%i_%i_Pt_%0.1f_%0.1f_%s.root", fileNameSuffix.c_str(), additionalSuffix.c_str(), splitName.c_str(), int(minRange), int(maxRange), pTMin, pTMax, DihadronCorrTypeName[corrType].c_str()) << std::endl;
     std::cout << "Processing completed for all samples." << std::endl;
 }
-

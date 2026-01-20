@@ -61,8 +61,8 @@ std::map<int, std::string> DihadronCorrTypeName = {
 };
 
 std::map<int, std::vector<float>> DihadrondEtaRange = {
-    {kTPCFT0A,{-5.2, -2.5}}, //-5.2,-3.2
-    {kTPCFT0C, {1.2, 4.0}}, //1.5,3.5 , 4.4,1.2
+    {kTPCFT0A,{-5.8, -2.6}}, //-5.2,-3.2
+    {kTPCFT0C, {1.2, 4.2}}, //1.5,3.5 , 4.4,1.2
     {kTPCTPC, {0.8, 0.8}},
     // {kFT0AFT0C, {5.5, 8.5}}
     // cut edge of FT0A-FT0C

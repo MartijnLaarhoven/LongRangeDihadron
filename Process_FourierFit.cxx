@@ -107,22 +107,27 @@ void Process_FourierFit() {
     collisionSystemName = "Ne-Ne";
     kOutputVnDelta = true;
     
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    // {InputUnit("LHC25af_pass1_537547", kFT0AFT0C, 0, 20)}, 
-    // "LHC25af_pass1_537547"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    // {InputUnit("LHC25af_pass1_532067", kTPCFT0A, 0, 10)}, 
-    // "LHC25af_pass1_532067"));
-    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    // {InputUnit("LHC25af_pass1_532067", kTPCFT0C, 0, 10)}, 
-    // "LHC25af_pass1_532067"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
-    {InputUnit("LHC25af_pass1_532067", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass1_532067"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
-    {InputUnit("LHC25af_pass1_532067", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass1_532067"));
-
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_591069", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_591069"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_591069", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_591069"));
+    //innerring
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_591387", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_591387"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_591387", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_591387"));
+    //outterring
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_591389", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_591389"));
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_591389", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_591389"));
+    
     for (auto config : configList) {
         if (config.isPtDiff) {
             ProcessConfig_PtDiff(config.isNch, config.dataList, config.outputFileName);
