@@ -106,34 +106,58 @@ void Process_FourierFit() {
 
     collisionSystemName = "Ne-Ne";
     kOutputVnDelta = true;
-    //old
+    //ft0a-ft0c
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass2_565246"));
+    {InputUnit("LHC25af_pass2_594019", kFT0AFT0C, 0, 20)}, 
+    "LHC25af_pass2_594019"));
+
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass2_565246"));
-    //remap
+    {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
+    "LHC25ae_pass2_561907"));
+
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_591069", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass2_591069"));
+    {InputUnit("LHC25ae_pass2_587867", kTPCFT0C, 0, 20)}, 
+    "LHC25ae_pass2_587867"));
+
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_591069", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass2_591069"));
+    {InputUnit("LHC25ae_pass2_587867", kTPCFT0A, 0, 20)}, 
+    "LHC25ae_pass2_587867"));
     //innerring
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_591387", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass2_591387"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_591387", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass2_591387"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_594018", kFT0AFT0C, 0, 20)}, 
+    // "LHC25af_pass2_594018"));
     //outterring
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_591389", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass2_591389"));
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_591389", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass2_591389"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_594020", kFT0AFT0C, 0, 20)}, 
+    // "LHC25af_pass2_594020"));
+    //old
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_565246", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_565246"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_565246", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_565246"));
+    //remap
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_591069", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_591069"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_591069", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_591069"));
+    //innerring
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_591387", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_591387"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_591387", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_591387"));
+    //outterring
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_591389", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_591389"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_591389", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_591389"));
     
     for (auto config : configList) {
         if (config.isPtDiff) {
@@ -165,6 +189,7 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
     // 执行模板拟合获取所有结果
     std::vector<VnUnit*> vnResults;
     for (const auto& data : dataList) {
+        std::cout << "[DEBUG] Processing dataset: " << data.fileNameSuffix << ", corrType: " << data.corrType << ", range: [" << data.minRange << ", " << data.maxRange << "]" << std::endl;
         vnResults.push_back(FourierFit(isNch, data, (!kOutputVnDelta)));
     }
 
@@ -565,7 +590,8 @@ VnUnit* fitSample(Bool_t isNch, TFile* datafile, InputUnit data, int sample = -1
     TString suffix = (sample == -1) ? "" : Form("_%d", sample);
     hm = (TH1D*)datafile->Get(Form("bsSample_hPhiSameOverMixed_%d_%d%s", data.minRange, data.maxRange, suffix.Data()));
     if (!hm) {
-        std::cerr << "Cannot find histogram: " << Form("bsSample_hPhiSameOverMixed_%d_%d%s", data.minRange, data.maxRange, suffix.Data()) << std::endl;
+        std::cerr << "[DEBUG] Cannot find histogram in file: " << data.fileNameSuffix << ", hist: " << Form("bsSample_hPhiSameOverMixed_%d_%d%s", data.minRange, data.maxRange, suffix.Data()) << std::endl;
+        std::cerr << "[DEBUG] File tried: ./AnalysisResultsROOTFiles/longRangeDihadronCorr/AnalysisResults_" << data.fileNameSuffix << ".root" << std::endl;
         return 0;
     }
     RooFourierFit(hm, fParamVal, fParamErr);
