@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include "./include/BasicForDihadron.h"
+R__LOAD_LIBRARY(libO2PhysicsPWGCFCore)
 
 struct InputUnit {
     std::string fileNameSuffix;
@@ -275,15 +276,24 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
 
     // Find the actual directory name in the file (handles extra suffixes like _idXXXXX)
     std::string dirPrefix = Form("long-range-dihadron-cor_%s%s_%d_%d", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange);
+    // For oxygen run with multiple ID directories, select the correct one based on corrType
+    std::string forcedDirName = "";
+    if (fileNameSuffix == "LHC25ae_pass2_623296") {
+        if (corrType == kFT0AFT0C) forcedDirName = dirPrefix + "_id48491";
+        else if (corrType == kTPCFT0A || corrType == kTPCFT0C) forcedDirName = dirPrefix + "_id47922";
+    }
     TIter next(file->GetListOfKeys());
     TKey *key;
     TDirectory *targetDir = nullptr;
-    while ((key = (TKey*)next())) {
-        std::string keyName = key->GetName();
-        if (keyName.find(dirPrefix) == 0) { // starts with prefix
-            targetDir = (TDirectory*)file->Get(keyName.c_str());
-            // Continue iterating to get the last matching directory
-            // (for FT0A-FT0C correlations, this selects id48490 over id47923)
+    if (!forcedDirName.empty()) {
+        targetDir = (TDirectory*)file->Get(forcedDirName.c_str());
+    } else {
+        while ((key = (TKey*)next())) {
+            std::string keyName = key->GetName();
+            if (keyName.find(dirPrefix) == 0) { // starts with prefix
+                targetDir = (TDirectory*)file->Get(keyName.c_str());
+                break;
+            }
         }
     }
 
@@ -717,30 +727,35 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
 
 
     // Try to get objects with correlation type suffix first, then fallback to bare names
-    CorrelationContainer *same = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/sameEvent_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+    std::string dirName = Form("long-range-dihadron-cor_%s%s_%d_%d", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange);
+    if (fileNameSuffix == "LHC25ae_pass2_623296") {
+        if (corrType == kFT0AFT0C) dirName += "_id48491";
+        else if (corrType == kTPCFT0A || corrType == kTPCFT0C) dirName += "_id47922";
+    }
+    CorrelationContainer *same = (CorrelationContainer*)file->Get(Form("%s/sameEvent_%s", dirName.c_str(), DihadronCorrTypeName[corrType].c_str()));
     if (!same) {
         std::cout << "[Info] sameEvent_" << DihadronCorrTypeName[corrType] << " not found in long-range-dihadron-cor path, trying bare 'sameEvent'" << std::endl;
-        same = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/sameEvent", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+        same = (CorrelationContainer*)file->Get(Form("%s/sameEvent", dirName.c_str()));
     }
     
-    CorrelationContainer *mixed = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/mixedEvent_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+    CorrelationContainer *mixed = (CorrelationContainer*)file->Get(Form("%s/mixedEvent_%s", dirName.c_str(), DihadronCorrTypeName[corrType].c_str()));
     if (!mixed) {
         std::cout << "[Info] mixedEvent_" << DihadronCorrTypeName[corrType] << " not found in long-range-dihadron-cor path, trying bare 'mixedEvent'" << std::endl;
-        mixed = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/mixedEvent", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+        mixed = (CorrelationContainer*)file->Get(Form("%s/mixedEvent", dirName.c_str()));
     }
     
     THnSparseD *trig = nullptr;
     if (!isMc) {
-        trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/Trig_hist_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+        trig = (THnSparseD*)file->Get(Form("%s/Trig_hist_%s", dirName.c_str(), DihadronCorrTypeName[corrType].c_str()));
         if (!trig) {
             std::cout << "[Info] Trig_hist_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'Trig_hist'" << std::endl;
-            trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/Trig_hist", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+            trig = (THnSparseD*)file->Get(Form("%s/Trig_hist", dirName.c_str()));
         }
     } else {
-        trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue/MCTrig_hist_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+        trig = (THnSparseD*)file->Get(Form("%s/MCTrue/MCTrig_hist_%s", dirName.c_str(), DihadronCorrTypeName[corrType].c_str()));
         if (!trig) {
             std::cout << "[Info] MCTrig_hist_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'MCTrig_hist'" << std::endl;
-            trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue/MCTrig_hist", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+            trig = (THnSparseD*)file->Get(Form("%s/MCTrue/MCTrig_hist", dirName.c_str()));
         }
     }
     
