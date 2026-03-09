@@ -56,8 +56,44 @@ void Process_dPhidEta() {
     //inputList.push_back(InputUnit("LHC25af_pass2_593549", kFT0AFT0C, true, kPtDiffOff, 0, 20));
     //inputList.push_back(InputUnit("LHC25af_pass2_593549", kFT0AFT0C, kNch, kPtDiffOff, 0, 20));
     // ft0a-ft0c
-    inputList.push_back(InputUnit("LHC25af_pass2_594019", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25af_pass2_594019", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25af_pass2_594019", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25af_pass2_594019", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    
+    inputList.push_back(InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    
+    // tpc-ft0a/c
+    // inputList.push_back(InputUnit("LHC25af_pass2_622739", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25af_pass2_622739", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25af_pass2_622739", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25af_pass2_622739", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+
+    // O-O
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+
+    // PtDiff processing for 3times2PC
+    inputList.push_back(InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kCent, kPtDiffOn, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kCent, kPtDiffOn, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0A, kCent, kPtDiffOn, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0A, kCent, kPtDiffOn, 80, 100));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOn, 0, 20));
+    inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOn, 80, 100));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOn, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOn, 80, 100));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOn, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOn, 80, 100));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOn, 0, 20));
+    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOn, 80, 100));
     //innerring
     // inputList.push_back(InputUnit("LHC25af_pass2_594018", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25af_pass2_594018", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
@@ -101,17 +137,17 @@ void Process_dPhidEta() {
     // // inputList.push_back(InputUnit("LHC25af_pass2_554627", kTPCTPC, kCent, kPtDiffOff, 80, 100));
     // O-O
     // // ft0a-ft0c
-    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
     // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
 
     // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
     // // tpc-ft0c
-    inputList.push_back(InputUnit("LHC25ae_pass2_587867", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_575598", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
-    //outterring
+    // inputList.push_back(InputUnit("LHC25ae_pass2_587867", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_575598", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    // //outterring
     // inputList.push_back(InputUnit("LHC25ae_pass2_583828", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25ae_pass2_583826", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
     //innerring
@@ -124,8 +160,8 @@ void Process_dPhidEta() {
     // inputList.push_back(InputUnit("LHC25ae_pass2_572180", kTPCFT0C, kCent, kPtDiffOff, 20, 40));
     // inputList.push_back(InputUnit("LHC25ae_pass2_571294", kTPCFT0C, kCent, kPtDiffOff, 80, 100));    
     // // tpc-ft0a
-    inputList.push_back(InputUnit("LHC25ae_pass2_587867", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_575598", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_587867", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
+    // inputList.push_back(InputUnit("LHC25ae_pass2_575598", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
     //outterring
     // inputList.push_back(InputUnit("LHC25ae_pass2_583828", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25ae_pass2_583826", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
@@ -246,7 +282,8 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
         std::string keyName = key->GetName();
         if (keyName.find(dirPrefix) == 0) { // starts with prefix
             targetDir = (TDirectory*)file->Get(keyName.c_str());
-            break;
+            // Continue iterating to get the last matching directory
+            // (for FT0A-FT0C correlations, this selects id48490 over id47923)
         }
     }
 
@@ -257,19 +294,40 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
         return;
     }
 
+    // Try to get objects with correlation type suffix first, then fallback to bare names
     CorrelationContainer *same = (CorrelationContainer*)targetDir->Get(Form("sameEvent_%s", DihadronCorrTypeName[corrType].c_str()));
+    if (!same) {
+        std::cout << "[Info] sameEvent_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'sameEvent'" << std::endl;
+        same = (CorrelationContainer*)targetDir->Get("sameEvent");
+    }
+    
     CorrelationContainer *mixed = (CorrelationContainer*)targetDir->Get(Form("mixedEvent_%s", DihadronCorrTypeName[corrType].c_str()));
+    if (!mixed) {
+        std::cout << "[Info] mixedEvent_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'mixedEvent'" << std::endl;
+        mixed = (CorrelationContainer*)targetDir->Get("mixedEvent");
+    }
+    
     THnSparseD *trig = nullptr;
     if (!isMc) {
         trig = (THnSparseD*)targetDir->Get(Form("Trig_hist_%s", DihadronCorrTypeName[corrType].c_str()));
+        if (!trig) {
+            std::cout << "[Info] Trig_hist_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'Trig_hist'" << std::endl;
+            trig = (THnSparseD*)targetDir->Get("Trig_hist");
+        }
     } else {
         TDirectory *mcTrueDir = (TDirectory*)targetDir->Get("MCTrue");
-        if (mcTrueDir)
+        if (mcTrueDir) {
             trig = (THnSparseD*)mcTrueDir->Get(Form("MCTrig_hist_%s", DihadronCorrTypeName[corrType].c_str()));
+            if (!trig) {
+                std::cout << "[Info] MCTrig_hist_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'MCTrig_hist'" << std::endl;
+                trig = (THnSparseD*)mcTrueDir->Get("MCTrig_hist");
+            }
+        }
     }
 
     if (!same || !mixed || !trig) {
         std::cerr << "Error getting histograms for " << fileNameSuffix << " with " << splitName << " and range [" << minRange << ", " << maxRange << "]" << std::endl;
+        std::cerr << "  same=" << same << ", mixed=" << mixed << ", trig=" << trig << std::endl;
         file->Close();
         delete file;
         return;
@@ -658,18 +716,38 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
     }
 
 
+    // Try to get objects with correlation type suffix first, then fallback to bare names
     CorrelationContainer *same = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/sameEvent_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+    if (!same) {
+        std::cout << "[Info] sameEvent_" << DihadronCorrTypeName[corrType] << " not found in long-range-dihadron-cor path, trying bare 'sameEvent'" << std::endl;
+        same = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/sameEvent", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+    }
+    
     CorrelationContainer *mixed = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/mixedEvent_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+    if (!mixed) {
+        std::cout << "[Info] mixedEvent_" << DihadronCorrTypeName[corrType] << " not found in long-range-dihadron-cor path, trying bare 'mixedEvent'" << std::endl;
+        mixed = (CorrelationContainer*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/mixedEvent", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+    }
+    
     THnSparseD *trig = nullptr;
     if (!isMc) {
         trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/Trig_hist_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+        if (!trig) {
+            std::cout << "[Info] Trig_hist_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'Trig_hist'" << std::endl;
+            trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/Trig_hist", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+        }
     } else {
         trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue/MCTrig_hist_%s", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange, DihadronCorrTypeName[corrType].c_str()));
+        if (!trig) {
+            std::cout << "[Info] MCTrig_hist_" << DihadronCorrTypeName[corrType] << " not found, trying bare 'MCTrig_hist'" << std::endl;
+            trig = (THnSparseD*)file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue/MCTrig_hist", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange));
+        }
     }
     
 
     if (!same || !mixed || !trig) {
         std::cerr << "Error getting histograms for " << fileNameSuffix << " with " << splitName << " and range [" << minRange << ", " << maxRange << "]" << std::endl;
+        std::cerr << "  same=" << same << ", mixed=" << mixed << ", trig=" << trig << std::endl;
         file->Close();
         delete file;
         return;
