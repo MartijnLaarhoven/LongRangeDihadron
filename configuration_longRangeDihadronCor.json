@@ -1020,12 +1020,12 @@
         "5000"
       ]
     },
-    "processSameTpcFt0a": "true",
-    "processMixedTpcFt0a": "true",
+    "processSameTpcFt0a": "false",
+    "processMixedTpcFt0a": "false",
     "processSameTpcFt0c": "false",
     "processMixedTpcFt0c": "false",
-    "processSameFt0aFt0c": "false",
-    "processMixedFt0aFt0c": "false"
+    "processSameFt0aFt0c": "true",
+    "processMixedFt0aFt0c": "true"
   },
   "internal-dpl-aod-writer": {},
   "internal-dpl-aod-global-analysis-file-sink": {},

@@ -13,7 +13,7 @@ double maxPt = 3.0;
 double minPt = 0.2;
 Int_t maxSample = 10;
 
-std::vector<float> pTBins = {0.2,0.6,1,1.5,2,3,4,5,6,10};
+std::vector<float> pTBins = {0.2,0.5,1,1.5,2,3,4,5,6,10};
 
 enum {
     kCent = 0,
@@ -61,12 +61,10 @@ std::map<int, std::string> DihadronCorrTypeName = {
 };
 
 std::map<int, std::vector<float>> DihadrondEtaRange = {
-    {kTPCFT0A,{-5.8, -2.6}}, //-5.2,-3.2
-    {kTPCFT0C, {1.2, 3.5}}, //1.5,3.5 , 4.4,1.2
-    {kTPCTPC, {0.8, 0.8}},
-    // {kFT0AFT0C, {5.5, 8.5}}
-    // cut edge of FT0A-FT0C
-    {kFT0AFT0C, {6., 7.2}} //6.
+    {kTPCFT0A,{-5.8, -2.6}}, 
+    {kTPCFT0C, {1.2, 3.5}}, 
+    {kFT0AFT0C, {6., 7.2}},
+    {kTPCTPC, {0.8, 0.8}}
 };
 
 std::map<int, float> MixEventNormalizationEta = {

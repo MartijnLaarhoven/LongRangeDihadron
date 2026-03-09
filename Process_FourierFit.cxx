@@ -50,21 +50,27 @@ struct ConfigUnit {
 };
 
 struct VnUnit {
+    Double_t v1;
+    Double_t v1_err;
     Double_t v2;
     Double_t v2_err;
     Double_t v3;
     Double_t v3_err;
     Double_t v4;
     Double_t v4_err;
+    std::vector<Double_t> subsample_v1;
+    std::vector<Double_t> subsample_v1_err;
     std::vector<Double_t> subsample_v2;
     std::vector<Double_t> subsample_v2_err;
     std::vector<Double_t> subsample_v3;
     std::vector<Double_t> subsample_v3_err;
     std::vector<Double_t> subsample_v4;
     std::vector<Double_t> subsample_v4_err;
-    VnUnit(Double_t _v2, Double_t _v2_err, Double_t _v3, Double_t _v3_err, Double_t _v4, Double_t _v4_err) :
-        v2(_v2), v2_err(_v2_err), v3(_v3), v3_err(_v3_err), v4(_v4), v4_err(_v4_err) {}
+    VnUnit(Double_t _v1, Double_t _v1_err, Double_t _v2, Double_t _v2_err, Double_t _v3, Double_t _v3_err, Double_t _v4, Double_t _v4_err) :
+        v1(_v1), v1_err(_v1_err), v2(_v2), v2_err(_v2_err), v3(_v3), v3_err(_v3_err), v4(_v4), v4_err(_v4_err) {}
     void ResizeSubsample(int Nsample) {
+        subsample_v1.resize(Nsample);
+        subsample_v1_err.resize(Nsample);
         subsample_v2.resize(Nsample);
         subsample_v2_err.resize(Nsample);
         subsample_v3.resize(Nsample);
@@ -72,11 +78,13 @@ struct VnUnit {
         subsample_v4.resize(Nsample);
         subsample_v4_err.resize(Nsample);
     }
-    void Fillsample(int isample, Double_t _v2, Double_t _v2_err, Double_t _v3, Double_t _v3_err, Double_t _v4, Double_t _v4_err) {
+    void Fillsample(int isample, Double_t _v1, Double_t _v1_err, Double_t _v2, Double_t _v2_err, Double_t _v3, Double_t _v3_err, Double_t _v4, Double_t _v4_err) {
         if (isample >= subsample_v2.size()) {
             Printf("You are filling out of range: isample %d, vector size: %zu", isample, subsample_v2.size());
             return;
         }
+        subsample_v1[isample] = _v1;
+        subsample_v1_err[isample] = _v1_err;
         subsample_v2[isample] = _v2;
         subsample_v2_err[isample] = _v2_err;
         subsample_v3[isample] = _v3;
@@ -107,21 +115,81 @@ void Process_FourierFit() {
     collisionSystemName = "Ne-Ne";
     kOutputVnDelta = true;
     //ft0a-ft0c
+    
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25af_pass2_594019", kFT0AFT0C, 0, 20)}, 
-    "LHC25af_pass2_594019"));
+    {InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 0, 20)}, 
+    "LHC25af_pass2_623297"));
+    
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 0, 20)}, 
+    // "LHC25af_pass2_623297"));
+    
+    // // tpc-ft0a/c
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_622739", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_622739"));
+    
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25af_pass2_622739", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_622739"));
+    
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_623540", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_623540"));
+    
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25af_pass2_623540", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_623540"));
+
+    // O-O
+    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    {InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, 0, 20)}, 
+    "LHC25ae_pass2_623296"));
 
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
-    "LHC25ae_pass2_561907"));
+    {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 0, 20)}, 
+    "LHC25ae_pass2_623296"));
 
     configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25ae_pass2_587867", kTPCFT0C, 0, 20)}, 
-    "LHC25ae_pass2_587867"));
+    {InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 0, 20)}, 
+    "LHC25ae_pass2_623296"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff,
-    {InputUnit("LHC25ae_pass2_587867", kTPCFT0A, 0, 20)}, 
-    "LHC25ae_pass2_587867"));
+    // PtDiff processing for 3times2PC
+    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    {InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 0, 20)}, 
+    "LHC25af_pass2_623297"));
+    
+    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    {InputUnit("LHC25af_pass2_623540", kTPCFT0A, 0, 20)}, 
+    "LHC25af_pass2_623540"));
+    
+    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    {InputUnit("LHC25af_pass2_623540", kTPCFT0C, 0, 20)}, 
+    "LHC25af_pass2_623540"));
+
+    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    {InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, 0, 20)}, 
+    "LHC25ae_pass2_623296"));
+
+    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 0, 20)}, 
+    "LHC25ae_pass2_623296"));
+
+    configList.push_back(ConfigUnit(kCent, kPtDiffOn,
+    {InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 0, 20)}, 
+    "LHC25ae_pass2_623296"));
+
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25ae_pass2_561907", kFT0AFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_561907"));
+
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25ae_pass2_587867", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_587867"));
+
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
+    // {InputUnit("LHC25ae_pass2_587867", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_587867"));
     //innerring
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff,
     // {InputUnit("LHC25af_pass2_594018", kFT0AFT0C, 0, 20)}, 
@@ -208,6 +276,8 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
         }
 
         // 初始化直方图
+        TH1D* hV1 = new TH1D("hV1", "v_{1};Centrality;v_{1}", 
+                            mergedRanges.size()-1, binEdges.data());
         TH1D* hV2 = new TH1D("hV2", "v_{2};Centrality;v_{2}", 
                             mergedRanges.size()-1, binEdges.data());
         TH1D* hV3 = new TH1D("hV3", "v_{3};Centrality;v_{3}", 
@@ -217,6 +287,9 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
 
         // 填充数据
         for (size_t i = 0; i < vnResults.size(); ++i) {
+            hV1->SetBinContent(i+1, vnResults[i]->v1);
+            hV1->SetBinError(i+1, vnResults[i]->v1_err);
+            
             hV2->SetBinContent(i+1, vnResults[i]->v2);
             hV2->SetBinError(i+1, vnResults[i]->v2_err);
             
@@ -228,6 +301,7 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
         }
 
         // 写入文件
+        hV1->Write();
         hV2->Write();
         hV3->Write();
         hV4->Write();
@@ -236,6 +310,8 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
             TDirectory* subsampleDir = outputFile.mkdir("Subsamples");
             subsampleDir->cd();
             for (Int_t sample = 0; sample < vnResults[0]->subsample_v2.size(); sample++) {
+                TH1D* hV1_sub = new TH1D(Form("hV1_subsample_%d", sample), Form("v_{1} subsample %d;Centrality;v_{1}", sample), 
+                                    mergedRanges.size()-1, binEdges.data());
                 TH1D* hV2_sub = new TH1D(Form("hV2_subsample_%d", sample), Form("v_{2} subsample %d;Centrality;v_{2}", sample), 
                                     mergedRanges.size()-1, binEdges.data());
                 TH1D* hV3_sub = new TH1D(Form("hV3_subsample_%d", sample), Form("v_{3} subsample %d;Centrality;v_{3}", sample), 
@@ -243,6 +319,8 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
                 TH1D* hV4_sub = new TH1D(Form("hV4_subsample_%d", sample), Form("v_{4} subsample %d;Centrality;v_{4}", sample), 
                                     mergedRanges.size()-1, binEdges.data());
                 for (size_t i = 0; i < vnResults.size(); ++i) {
+                    hV1_sub->SetBinContent(i+1, vnResults[i]->subsample_v1[sample]);
+                    hV1_sub->SetBinError(i+1, vnResults[i]->subsample_v1_err[sample]);
                     hV2_sub->SetBinContent(i+1, vnResults[i]->subsample_v2[sample]);
                     hV2_sub->SetBinError(i+1, vnResults[i]->subsample_v2_err[sample]);
                     hV3_sub->SetBinContent(i+1, vnResults[i]->subsample_v3[sample]);
@@ -250,6 +328,7 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
                     hV4_sub->SetBinContent(i+1, vnResults[i]->subsample_v4[sample]);
                     hV4_sub->SetBinError(i+1, vnResults[i]->subsample_v4_err[sample]);
                 }
+                hV1_sub->Write();
                 hV2_sub->Write();
                 hV3_sub->Write();
                 hV4_sub->Write();
@@ -258,6 +337,7 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
     } else {
         // 创建TGraphErrors
         Int_t nPoints = dataList.size();
+        TGraphErrors* gV1 = new TGraphErrors(nPoints);
         TGraphErrors* gV2 = new TGraphErrors(nPoints);
         TGraphErrors* gV3 = new TGraphErrors(nPoints);
         TGraphErrors* gV4 = new TGraphErrors(nPoints);
@@ -265,6 +345,7 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
         // 设置标题
         std::string Xtitle = "Centrality (%)";
         if (isNch) Xtitle = "Nch";
+        gV1->SetNameTitle("gV1", Form("v_{1};%s;v_{1}", Xtitle.c_str()));
         gV2->SetNameTitle("gV2", Form("v_{2};%s;v_{2}", Xtitle.c_str()));
         gV3->SetNameTitle("gV3", Form("v_{3};%s;v_{3}", Xtitle.c_str()));
         gV4->SetNameTitle("gV4", Form("v_{4};%s;v_{4}", Xtitle.c_str()));
@@ -273,6 +354,9 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
         for (Int_t i = 0; i < nPoints; ++i) {
             Double_t xCenter = 0.5*(dataList[i].minRange + dataList[i].maxRange);
             Double_t xError = 0.5*(dataList[i].maxRange - dataList[i].minRange);
+            
+            gV1->SetPoint(i, xCenter, vnResults[i]->v1);
+            gV1->SetPointError(i, xError, vnResults[i]->v1_err);
             
             gV2->SetPoint(i, xCenter, vnResults[i]->v2);
             gV2->SetPointError(i, xError, vnResults[i]->v2_err);
@@ -285,6 +369,7 @@ void ProcessConfig(Bool_t isNch, std::vector<InputUnit> dataList, std::string ou
         }
 
         // 写入文件
+        gV1->Write();
         gV2->Write();
         gV3->Write();
         gV4->Write();
@@ -306,6 +391,7 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
             double pTMax = pTBins[iPt + 1];
             vnResults.push_back(FourierFit(isNch, data, kFALSE, pTMin, pTMax));
         }
+
         // 创建输出文件
         std::string splitName = "Mult";
         if (!isNch) splitName = "Cent";
@@ -314,6 +400,8 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
         TFile outputFile(Form("./FourierFit/PtDiff/Vn%s_%s_%s_%i_%i_%s.root", stringDelta.c_str(), outputFileName.c_str(), splitName.c_str(), data.minRange, data.maxRange, DihadronCorrTypeName[dataList[0].corrType].c_str()), "RECREATE");
 
         // 初始化直方图
+        TH1D* hV1 = new TH1D("hV1", "v_{1};p_{T};v_{1}", 
+                            pTBins.size()-1, pTBins.data());
         TH1D* hV2 = new TH1D("hV2", "v_{2};p_{T};v_{2}", 
                             pTBins.size()-1, pTBins.data());
         TH1D* hV3 = new TH1D("hV3", "v_{3};p_{T};v_{3}", 
@@ -323,6 +411,9 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
 
         // 填充数据
         for (size_t i = 0; i < vnResults.size(); ++i) {
+            hV1->SetBinContent(i+1, vnResults[i]->v1);
+            hV1->SetBinError(i+1, vnResults[i]->v1_err);
+            
             hV2->SetBinContent(i+1, vnResults[i]->v2);
             hV2->SetBinError(i+1, vnResults[i]->v2_err);
             
@@ -334,6 +425,7 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
         }
 
         // 写入文件
+        hV1->Write();
         hV2->Write();
         hV3->Write();
         hV4->Write();
@@ -343,6 +435,8 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
             TDirectory* subsampleDir = outputFile.mkdir("Subsamples");
             subsampleDir->cd();
             for (Int_t sample = 0; sample < vnResults[0]->subsample_v2.size(); sample++) {
+                TH1D* hV1_sub = new TH1D(Form("hV1_subsample_%d", sample), "v_{1};p_{T};v_{1}", 
+                                    pTBins.size()-1, pTBins.data());
                 TH1D* hV2_sub = new TH1D(Form("hV2_subsample_%d", sample), "v_{2};p_{T};v_{2}", 
                                     pTBins.size()-1, pTBins.data());
                 TH1D* hV3_sub = new TH1D(Form("hV3_subsample_%d", sample), "v_{3};p_{T};v_{3}", 
@@ -350,6 +444,8 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
                 TH1D* hV4_sub = new TH1D(Form("hV4_subsample_%d", sample), "v_{4};p_{T};v_{4}", 
                                     pTBins.size()-1, pTBins.data());
                 for (size_t i = 0; i < vnResults.size(); ++i) {
+                    hV1_sub->SetBinContent(i+1, vnResults[i]->subsample_v1[sample]);
+                    hV1_sub->SetBinError(i+1, vnResults[i]->subsample_v1_err[sample]);
                     hV2_sub->SetBinContent(i+1, vnResults[i]->subsample_v2[sample]);
                     hV2_sub->SetBinError(i+1, vnResults[i]->subsample_v2_err[sample]);
                     hV3_sub->SetBinContent(i+1, vnResults[i]->subsample_v3[sample]);
@@ -357,6 +453,7 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
                     hV4_sub->SetBinContent(i+1, vnResults[i]->subsample_v4[sample]);
                     hV4_sub->SetBinError(i+1, vnResults[i]->subsample_v4_err[sample]);
                 }
+                hV1_sub->Write();
                 hV2_sub->Write();
                 hV3_sub->Write();
                 hV4_sub->Write();
@@ -466,7 +563,7 @@ VnUnit* FourierFit(Bool_t isNch, InputUnit data, Bool_t cn2Tovn2, Double_t pTMin
         ValueErrorArray[1][sample][0] = vnTemp->v3_err;
         ValueArray[2][sample][0] = vnTemp->v4;
         ValueErrorArray[2][sample][0] = vnTemp->v4_err;
-        vnResult->Fillsample(sample, vnTemp->v2, vnTemp->v2_err, vnTemp->v3, vnTemp->v3_err, vnTemp->v4, vnTemp->v4_err);
+        vnResult->Fillsample(sample, vnTemp->v1, vnTemp->v1_err, vnTemp->v2, vnTemp->v2_err, vnTemp->v3, vnTemp->v3_err, vnTemp->v4, vnTemp->v4_err);
         if (pTMin > 0 && pTMax > 0) {
             VnUnit* vnTemp_PtDiff = fitSample(isNch, datafile_PtDiff, data, sample, pTMin, pTMax);
             if (!vnTemp_PtDiff) {
@@ -482,7 +579,7 @@ VnUnit* FourierFit(Bool_t isNch, InputUnit data, Bool_t cn2Tovn2, Double_t pTMin
             ValueErrorArray[1][sample][0] = vnTemp_PtDiff->v3_err;
             ValueArray[2][sample][0] = vnTemp_PtDiff->v4;
             ValueErrorArray[2][sample][0] = vnTemp_PtDiff->v4_err;
-            vnResult_PtDiff->Fillsample(sample, vnTemp_PtDiff->v2, vnTemp_PtDiff->v2_err, vnTemp_PtDiff->v3, vnTemp_PtDiff->v3_err, vnTemp_PtDiff->v4, vnTemp_PtDiff->v4_err);
+            vnResult_PtDiff->Fillsample(sample, vnTemp_PtDiff->v1, vnTemp_PtDiff->v1_err, vnTemp_PtDiff->v2, vnTemp_PtDiff->v2_err, vnTemp_PtDiff->v3, vnTemp_PtDiff->v3_err, vnTemp_PtDiff->v4, vnTemp_PtDiff->v4_err);
             delete vnTemp_PtDiff;
         }
         delete vnTemp;
@@ -598,7 +695,7 @@ VnUnit* fitSample(Bool_t isNch, TFile* datafile, InputUnit data, int sample = -1
     if (sample == -1) {
         PlotFitting(hm, isNch, data.fileNameSuffix, data.minRange, data.maxRange, fParamVal, fParamErr, data.corrType, pTMin, pTMax);
     }
-    VnUnit* vnResult = new VnUnit(fParamVal[0], fParamErr[0], fParamVal[1], fParamErr[1], fParamVal[2], fParamErr[2]);
+    VnUnit* vnResult = new VnUnit(fParamVal[3], fParamErr[3], fParamVal[0], fParamErr[0], fParamVal[1], fParamErr[1], fParamVal[2], fParamErr[2]);
     return vnResult;
 }
 
@@ -890,10 +987,10 @@ void PlotFitting(TH1 *hm, Bool_t isNch, std::string fileSuffix, Int_t minRange, 
     leg->AddEntry(hm, "Data", "lep");
     leg->AddEntry(gCopy, "a_{0} + #Sigma_{n=1}^{4}2a_{n}cos(n#Delta#phi)", "l");
     leg->AddEntry(gPeri, "Baseline a0", "l");
-    leg->AddEntry(fit_p1, Form("a_{0} + 2a_{1}cos(#Delta#phi), v1^{2}#times10^{3} = %0.2f", v12*1e3), "l");
-    leg->AddEntry(fit_p2, Form("a_{0} + 2a_{2}cos(2#Delta#phi), v2^{2}#times10^{3} = %0.2f", v21*1e3), "l");
-    leg->AddEntry(fit_p3, Form("a_{0} + 2a_{3}cos(3#Delta#phi), v3^{2}#times10^{3} = %0.2f", v31*1e3), "l");
-    leg->AddEntry(fit_p4, Form("a_{0} + 2a_{4}cos(4#Delta#phi), v4^{2}#times10^{3} = %0.2f", v41*1e3), "l");
+    leg->AddEntry(fit_p1, Form("a_{0} + 2a_{1}cos(#Delta#phi), v1^{2} = %0.6f", v12), "l");
+    leg->AddEntry(fit_p2, Form("a_{0} + 2a_{2}cos(2#Delta#phi), v2^{2} = %0.6f", v21), "l");
+    leg->AddEntry(fit_p3, Form("a_{0} + 2a_{3}cos(3#Delta#phi), v3^{2} = %0.6f", v31), "l");
+    leg->AddEntry(fit_p4, Form("a_{0} + 2a_{4}cos(4#Delta#phi), v4^{2} = %0.6f", v41), "l");
     leg->Draw();
 
     // =============== 新增：添加chi2/ndf标签 ===============
