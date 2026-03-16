@@ -62,17 +62,21 @@ void DrawComparisonAndSave(TFile* fileFourier, TFile* fileTemplate, const std::s
 void Plot_Compare3times2PC() {
     struct DatasetUnit {
         std::string runTag;
+        std::string splitName;
+        int minRange;
+        int maxRange;
         std::string outputSuffix;
     };
 
     std::vector<DatasetUnit> datasets = {
-        {"LHC25af_pass2_623297", ""},
-        {"LHC25ae_pass2_623296", "_LHC25ae_pass2_623296"}
+        {"LHC25af_pass2_623297", "Cent", 0, 20, ""},
+        {"LHC25ae_pass2_623296", "Cent", 0, 20, "_LHC25ae_pass2_623296"},
+        {"LHC25ae_pass2_634100", "Mult", 10, 50, "_LHC25ae_pass2_634100_Mult_10_50"}
     };
 
     for (const auto& dataset : datasets) {
-        TFile* fileFourier = new TFile(Form("./3times2PC/Vn_%s_kFourierFit_Cent_0_20.root", dataset.runTag.c_str()), "READ");
-        TFile* fileTemplate = new TFile(Form("./3times2PC/Vn_%s_kTemplateFit_Cent_0_20.root", dataset.runTag.c_str()), "READ");
+        TFile* fileFourier = new TFile(Form("./3times2PC/Vn_%s_kFourierFit_%s_%d_%d.root", dataset.runTag.c_str(), dataset.splitName.c_str(), dataset.minRange, dataset.maxRange), "READ");
+        TFile* fileTemplate = new TFile(Form("./3times2PC/Vn_%s_kTemplateFit_%s_%d_%d.root", dataset.runTag.c_str(), dataset.splitName.c_str(), dataset.minRange, dataset.maxRange), "READ");
 
         if (!fileFourier || !fileFourier->IsOpen()) {
             std::cerr << "Cannot open FourierFit file for " << dataset.runTag << std::endl;

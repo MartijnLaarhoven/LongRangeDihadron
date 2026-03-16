@@ -38,6 +38,7 @@ struct InputUnit {
 };
 
 void printAxesInfo(THnSparseF* sparseHist);
+std::string ResolveDihadronDirName(TFile* file, const std::string& fileNameSuffix, Int_t corrType, Bool_t isNch, Int_t minRange, Int_t maxRange);
 void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t isNch, Int_t minRange, Int_t maxRange, Bool_t isMc);
 void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType, Bool_t isNch, Int_t minRange, Int_t maxRange, Double_t pTMin, Double_t pTMax, Bool_t isMc);
 
@@ -74,27 +75,20 @@ void Process_dPhidEta() {
     // inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
 
-    // O-O
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOff, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOff, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOff, 80, 100));
+    // O-O (Nch-based analysis)
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kFT0AFT0C, kNch, kPtDiffOff, 10, 50));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kFT0AFT0C, kNch, kPtDiffOff, 0, 10));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0A, kNch, kPtDiffOff, 10, 50));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0A, kNch, kPtDiffOff, 0, 10));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0C, kNch, kPtDiffOff, 10, 50));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0C, kNch, kPtDiffOff, 0, 10));
 
-    // PtDiff processing for 3times2PC
-    // inputList.push_back(InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kCent, kPtDiffOn, 0, 20));
-    // inputList.push_back(InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kCent, kPtDiffOn, 80, 100));
-    // inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0A, kCent, kPtDiffOn, 0, 20));
-    // inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0A, kCent, kPtDiffOn, 80, 100));
-    // inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOn, 0, 20));
-    // inputList.push_back(InputUnit("LHC25af_pass2_623540", kTPCFT0C, kCent, kPtDiffOn, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOn, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kCent, kPtDiffOn, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOn, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kCent, kPtDiffOn, 80, 100));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOn, 0, 20));
-    inputList.push_back(InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kCent, kPtDiffOn, 80, 100));
+    // PtDiff processing for 3times2PC (FT0A-FT0C has no pT information)
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0A, kNch, kPtDiffOn, 10, 50));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0A, kNch, kPtDiffOn, 0, 10));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0C, kNch, kPtDiffOn, 10, 50));
+    inputList.push_back(InputUnit("LHC25ae_pass2_634100", kTPCFT0C, kNch, kPtDiffOn, 0, 10));
+
     //innerring
     // inputList.push_back(InputUnit("LHC25af_pass2_594018", kFT0AFT0C, kCent, kPtDiffOff, 0, 20));
     // inputList.push_back(InputUnit("LHC25af_pass2_594018", kFT0AFT0C, kCent, kPtDiffOff, 80, 100));
@@ -244,6 +238,181 @@ void printAxesInfo(THnSparseF* sparseHist) {
     }
 }
 
+std::string ResolveDihadronDirName(TFile* file, const std::string& fileNameSuffix, Int_t corrType, Bool_t isNch, Int_t minRange, Int_t maxRange) {
+    if (!file) {
+        return "";
+    }
+
+    std::vector<std::string> splitAliases;
+    if (isNch) {
+        splitAliases = {"Mult", "Nch"};
+    } else {
+        splitAliases = {"Cent", "Centrality"};
+    }
+
+    std::vector<std::string> prefixes;
+    for (const auto& splitAlias : splitAliases) {
+        prefixes.push_back(Form("long-range-dihadron-cor_%s%s_%d_%d", additionalSuffix.c_str(), splitAlias.c_str(), minRange, maxRange));
+        prefixes.push_back(Form("long-range-dihadron-cor_%s%s%d_%d", additionalSuffix.c_str(), splitAlias.c_str(), minRange, maxRange));
+    }
+
+    if (fileNameSuffix == "LHC25ae_pass2_623296") {
+        std::string forcedId = "";
+        if (corrType == kFT0AFT0C) {
+            forcedId = "_id48491";
+        } else if (corrType == kTPCFT0A || corrType == kTPCFT0C) {
+            forcedId = "_id47922";
+        }
+        if (!forcedId.empty()) {
+            for (const auto& prefix : prefixes) {
+                std::string forcedDir = prefix + forcedId;
+                if (file->Get(forcedDir.c_str())) {
+                    return forcedDir;
+                }
+            }
+        }
+    }
+
+    if (fileNameSuffix == "LHC25ae_pass2_634100" && isNch) {
+        std::string forcedId = "";
+        if (corrType == kFT0AFT0C) {
+            forcedId = "_id49464";
+        } else if (corrType == kTPCFT0A || corrType == kTPCFT0C) {
+            forcedId = "_id49465";
+        }
+        if (!forcedId.empty()) {
+            Int_t resolvedMin = minRange;
+            Int_t resolvedMax = maxRange;
+            if (corrType == kFT0AFT0C) {
+                if (minRange == 0 && maxRange == 10) {
+                    resolvedMin = 10;
+                    resolvedMax = 50;
+                } else if (minRange == 10 && maxRange == 50) {
+                    resolvedMin = 0;
+                    resolvedMax = 10;
+                }
+            }
+
+            std::string exactNchDir = Form("long-range-dihadron-cor_Nch_%d_%d_ch%s", resolvedMin, resolvedMax, forcedId.c_str());
+            if (file->Get(exactNchDir.c_str())) {
+                return exactNchDir;
+            }
+            std::string exactMultDir = Form("long-range-dihadron-cor_Mult_%d_%d_ch%s", resolvedMin, resolvedMax, forcedId.c_str());
+            if (file->Get(exactMultDir.c_str())) {
+                return exactMultDir;
+            }
+
+            auto hasRequestedObjects = [&](const std::string& dirName) {
+                TDirectory* dir = (TDirectory*)file->Get(dirName.c_str());
+                if (!dir) {
+                    return false;
+                }
+                std::string corrName = DihadronCorrTypeName[corrType];
+                bool hasTypedSame = (dir->Get(Form("sameEvent_%s", corrName.c_str())) != nullptr);
+                bool hasTypedMixed = (dir->Get(Form("mixedEvent_%s", corrName.c_str())) != nullptr);
+                if (hasTypedSame && hasTypedMixed) {
+                    return true;
+                }
+                bool hasBareSame = (dir->Get("sameEvent") != nullptr);
+                bool hasBareMixed = (dir->Get("mixedEvent") != nullptr);
+                return hasBareSame && hasBareMixed;
+            };
+
+            auto matchesRequestedPrefix = [&](const std::string& keyName) {
+                for (const auto& prefix : prefixes) {
+                    if (keyName.find(prefix) == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            std::vector<std::string> idCandidatesExactRange;
+            std::vector<std::string> idCandidatesAnyRange;
+            TIter nextById(file->GetListOfKeys());
+            TKey* keyById;
+            while ((keyById = (TKey*)nextById())) {
+                std::string keyName = keyById->GetName();
+                if (keyName.find("long-range-dihadron-cor_") != 0) {
+                    continue;
+                }
+                if (keyName.find(forcedId) == std::string::npos) {
+                    continue;
+                }
+                if (keyName.find("Nch") == std::string::npos && keyName.find("Mult") == std::string::npos) {
+                    continue;
+                }
+                idCandidatesAnyRange.push_back(keyName);
+                if (matchesRequestedPrefix(keyName)) {
+                    idCandidatesExactRange.push_back(keyName);
+                }
+            }
+
+            for (const auto& candidate : idCandidatesExactRange) {
+                if (hasRequestedObjects(candidate)) {
+                    return candidate;
+                }
+            }
+
+            if (!idCandidatesExactRange.empty()) {
+                return idCandidatesExactRange.front();
+            }
+
+            for (const auto& candidate : idCandidatesAnyRange) {
+                if (hasRequestedObjects(candidate)) {
+                    return candidate;
+                }
+            }
+
+            if (!idCandidatesAnyRange.empty()) {
+                return idCandidatesAnyRange.front();
+            }
+        }
+    }
+
+    auto hasRequestedObjects = [&](const std::string& dirName) {
+        TDirectory* dir = (TDirectory*)file->Get(dirName.c_str());
+        if (!dir) {
+            return false;
+        }
+        std::string corrName = DihadronCorrTypeName[corrType];
+        bool hasTypedSame = (dir->Get(Form("sameEvent_%s", corrName.c_str())) != nullptr);
+        bool hasTypedMixed = (dir->Get(Form("mixedEvent_%s", corrName.c_str())) != nullptr);
+        if (hasTypedSame && hasTypedMixed) {
+            return true;
+        }
+        bool hasBareSame = (dir->Get("sameEvent") != nullptr);
+        bool hasBareMixed = (dir->Get("mixedEvent") != nullptr);
+        return hasBareSame && hasBareMixed;
+    };
+
+    std::vector<std::string> candidates;
+
+    TIter next(file->GetListOfKeys());
+    TKey* key;
+    while ((key = (TKey*)next())) {
+        std::string keyName = key->GetName();
+        for (const auto& prefix : prefixes) {
+            if (keyName.find(prefix) == 0) {
+                candidates.push_back(keyName);
+                break;
+            }
+        }
+    }
+
+    for (const auto& candidate : candidates) {
+        if (hasRequestedObjects(candidate)) {
+            return candidate;
+        }
+    }
+
+    if (!candidates.empty()) {
+        return candidates.front();
+    }
+
+    return "";
+}
+
 void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t isNch, Int_t minRange, Int_t maxRange, Bool_t isMc=false) {
     TFile *file = TFile::Open(Form("../AnalysisResultsROOTFiles/longRangeDihadronCorr/AnalysisResults_%s.root", fileNameSuffix.c_str()), "READ");
     if (!file || file->IsZombie()) {
@@ -254,9 +423,22 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
     std::string splitName = "Mult";
     if (!isNch) splitName = "Cent";
 
+    std::string dirName = ResolveDihadronDirName(file, fileNameSuffix, corrType, isNch, minRange, maxRange);
+    if (dirName.empty()) {
+        std::cerr << "Error: Directory for " << splitName << " range [" << minRange << ", " << maxRange << "] not found in file " << fileNameSuffix << std::endl;
+        file->Close();
+        delete file;
+        return;
+    }
+    std::cout << "[DirSelect] file=" << fileNameSuffix
+              << " corr=" << DihadronCorrTypeName[corrType]
+              << " split=" << splitName
+              << " range=[" << minRange << "," << maxRange << "]"
+              << " -> " << dirName << std::endl;
+
     // check if MCTrue folder is available
     if (isMc) {
-        if (!file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange))) {
+        if (!file->Get(Form("%s/MCTrue", dirName.c_str()))) {
             std::cerr << "Error: MCTrue folder not found for " << fileNameSuffix << std::endl;
             file->Close();
             delete file;
@@ -264,7 +446,7 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
         }
     }
     else {
-        if (file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange))) {
+        if (file->Get(Form("%s/MCTrue", dirName.c_str()))) {
             std::cerr << "Caution! you are using Reco or Data, but MCTrue folder is found for " << fileNameSuffix << std::endl;
             file->Close();
             delete file;
@@ -272,33 +454,10 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
         }
     }
 
-
-
-    // Find the actual directory name in the file (handles extra suffixes like _idXXXXX)
-    std::string dirPrefix = Form("long-range-dihadron-cor_%s%s_%d_%d", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange);
-    // For oxygen run with multiple ID directories, select the correct one based on corrType
-    std::string forcedDirName = "";
-    if (fileNameSuffix == "LHC25ae_pass2_623296") {
-        if (corrType == kFT0AFT0C) forcedDirName = dirPrefix + "_id48491";
-        else if (corrType == kTPCFT0A || corrType == kTPCFT0C) forcedDirName = dirPrefix + "_id47922";
-    }
-    TIter next(file->GetListOfKeys());
-    TKey *key;
-    TDirectory *targetDir = nullptr;
-    if (!forcedDirName.empty()) {
-        targetDir = (TDirectory*)file->Get(forcedDirName.c_str());
-    } else {
-        while ((key = (TKey*)next())) {
-            std::string keyName = key->GetName();
-            if (keyName.find(dirPrefix) == 0) { // starts with prefix
-                targetDir = (TDirectory*)file->Get(keyName.c_str());
-                break;
-            }
-        }
-    }
+    TDirectory *targetDir = (TDirectory*)file->Get(dirName.c_str());
 
     if (!targetDir) {
-        std::cerr << "Error: Directory starting with " << dirPrefix << " not found in file " << fileNameSuffix << std::endl;
+        std::cerr << "Error: Directory " << dirName << " not found in file " << fileNameSuffix << std::endl;
         file->Close();
         delete file;
         return;
@@ -547,6 +706,7 @@ void Read_dPhidEta_givenRange(std::string fileNameSuffix, Int_t corrType, Bool_t
         if (nTriggersS > 0) {
             hPhiEtaSMsum->Scale(1.0 / nTriggersS);
             hPhiEtaSsum->Scale(1.0 / nTriggersS);
+            hPhiEtaMsum->Scale(1.0 / nTriggersS);
         }
         hPhiEtaSMsum->Scale(1.0 / hPhiEtaSMsum->GetXaxis()->GetBinWidth(1));
         hPhiEtaSMsum->Scale(1.0 / hPhiEtaSMsum->GetYaxis()->GetBinWidth(1));
@@ -707,9 +867,23 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
     std::string splitName = "Mult";
     if (!isNch) splitName = "Cent";
 
+    std::string dirName = ResolveDihadronDirName(file, fileNameSuffix, corrType, isNch, minRange, maxRange);
+    if (dirName.empty()) {
+        std::cerr << "Error: Directory for " << splitName << " range [" << minRange << ", " << maxRange << "] not found in file " << fileNameSuffix << std::endl;
+        file->Close();
+        delete file;
+        return;
+    }
+    std::cout << "[DirSelect] file=" << fileNameSuffix
+              << " corr=" << DihadronCorrTypeName[corrType]
+              << " split=" << splitName
+              << " range=[" << minRange << "," << maxRange << "]"
+              << " pt=[" << pTMin << "," << pTMax << "]"
+              << " -> " << dirName << std::endl;
+
     // check if MCTrue folder is available
     if (isMc) {
-        if (!file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange))) {
+        if (!file->Get(Form("%s/MCTrue", dirName.c_str()))) {
             std::cerr << "Error: MCTrue folder not found for " << fileNameSuffix << std::endl;
             file->Close();
             delete file;
@@ -717,7 +891,7 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
         }
     }
     else {
-        if (file->Get(Form("long-range-dihadron-cor_%s%s_%d_%d/MCTrue", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange))) {
+        if (file->Get(Form("%s/MCTrue", dirName.c_str()))) {
             std::cerr << "Caution! you are using Reco or Data, but MCTrue folder is found for " << fileNameSuffix << std::endl;
             file->Close();
             delete file;
@@ -725,13 +899,7 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
         }
     }
 
-
     // Try to get objects with correlation type suffix first, then fallback to bare names
-    std::string dirName = Form("long-range-dihadron-cor_%s%s_%d_%d", additionalSuffix.c_str(), splitName.c_str(), minRange, maxRange);
-    if (fileNameSuffix == "LHC25ae_pass2_623296") {
-        if (corrType == kFT0AFT0C) dirName += "_id48491";
-        else if (corrType == kTPCFT0A || corrType == kTPCFT0C) dirName += "_id47922";
-    }
     CorrelationContainer *same = (CorrelationContainer*)file->Get(Form("%s/sameEvent_%s", dirName.c_str(), DihadronCorrTypeName[corrType].c_str()));
     if (!same) {
         std::cout << "[Info] sameEvent_" << DihadronCorrTypeName[corrType] << " not found in long-range-dihadron-cor path, trying bare 'sameEvent'" << std::endl;
@@ -918,6 +1086,7 @@ void Read_dPhidEta_givenRange_PtDiff(std::string fileNameSuffix, Int_t corrType,
         if (nTriggersS > 0) {
             hPhiEtaSMsum->Scale(1.0 / nTriggersS);
             hPhiEtaSsum->Scale(1.0 / nTriggersS);
+            hPhiEtaMsum->Scale(1.0 / nTriggersS);
         }
         hPhiEtaSMsum->Scale(1.0 / hPhiEtaSMsum->GetXaxis()->GetBinWidth(1));
         hPhiEtaSMsum->Scale(1.0 / hPhiEtaSMsum->GetYaxis()->GetBinWidth(1));

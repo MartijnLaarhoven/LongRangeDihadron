@@ -95,22 +95,22 @@ void Process_3times2PC() {
 
     // LM, MR, LR
     // LM, MR, LR - TemplateFit version
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
-    {InputUnit("LHC25af_pass2_623540", kTPCFT0A, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_623540", kTPCFT0C, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kTemplateFit, 0, 20)}, 
-    "LHC25af_pass2_623297_kTemplateFit"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
+    // {InputUnit("LHC25af_pass2_623540", kTPCFT0A, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_623540", kTPCFT0C, kTemplateFit, 0, 20), InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kTemplateFit, 0, 20)}, 
+    // "LHC25af_pass2_623297_kTemplateFit"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
-    {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kTemplateFit, 0, 20), InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kTemplateFit, 0, 20), InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kTemplateFit, 0, 20)}, 
-    "LHC25ae_pass2_623296_kTemplateFit"));
+    configList.push_back(ConfigUnit(kNch, kPtDiffOn, 
+    {InputUnit("LHC25ae_pass2_634100", kTPCFT0A, kTemplateFit, 10, 50), InputUnit("LHC25ae_pass2_634100", kTPCFT0C, kTemplateFit, 10, 50), InputUnit("LHC25ae_pass2_634100", kFT0AFT0C, kTemplateFit, 10, 50)}, 
+    "LHC25ae_pass2_634100_kTemplateFit"));
     
     // LM, MR, LR - FourierFit version
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
-    {InputUnit("LHC25af_pass2_623540", kTPCFT0A, kFourierFit, 0, 20), InputUnit("LHC25af_pass2_623540", kTPCFT0C, kFourierFit, 0, 20), InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kFourierFit, 0, 20)}, 
-    "LHC25af_pass2_623297_kFourierFit"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
+    // {InputUnit("LHC25af_pass2_623540", kTPCFT0A, kFourierFit, 0, 20), InputUnit("LHC25af_pass2_623540", kTPCFT0C, kFourierFit, 0, 20), InputUnit("LHC25af_pass2_623297", kFT0AFT0C, kFourierFit, 0, 20)}, 
+    // "LHC25af_pass2_623297_kFourierFit"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, 
-    {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, kFourierFit, 0, 20), InputUnit("LHC25ae_pass2_623296", kTPCFT0C, kFourierFit, 0, 20), InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, kFourierFit, 0, 20)}, 
-    "LHC25ae_pass2_623296_kFourierFit"));
+    configList.push_back(ConfigUnit(kNch, kPtDiffOn, 
+    {InputUnit("LHC25ae_pass2_634100", kTPCFT0A, kFourierFit, 10, 50), InputUnit("LHC25ae_pass2_634100", kTPCFT0C, kFourierFit, 10, 50), InputUnit("LHC25ae_pass2_634100", kFT0AFT0C, kFourierFit, 10, 50)}, 
+    "LHC25ae_pass2_634100_kFourierFit"));
 
     for (auto config : configList) {
         if (config.isPtDiff) {
@@ -121,7 +121,7 @@ void Process_3times2PC() {
 
 Bool_t UseV1ForConfig(const std::vector<InputUnit>& dataList) {
     if (dataList.size() != 3) return kFALSE;
-    return dataList[0].method == kFourierFit && dataList[1].method == kFourierFit && dataList[2].method == kFourierFit;
+    return kFALSE;
 }
 
 
@@ -181,7 +181,8 @@ void ProcessConfig_PtDiff(Bool_t isNch, std::vector<InputUnit> dataList, std::st
     TFile outputFile(Form("./3times2PC/Vn_%s_%s_%i_%i.root", outputFileName.c_str(), splitName.c_str(), dataList[2].minRange, dataList[2].maxRange), "RECREATE");
 
     // 初始化直方图
-    std::string methodSuffix = useV1 ? "_FourierFit" : "_TemplateFit";
+    Bool_t isFourierMethod = (dataList[0].method == kFourierFit && dataList[1].method == kFourierFit && dataList[2].method == kFourierFit);
+    std::string methodSuffix = isFourierMethod ? "_FourierFit" : "_TemplateFit";
     TH1D* hV1 = nullptr;
     if (useV1) {
         hV1 = new TH1D(Form("hV1%s", methodSuffix.c_str()), "v_{1};p_{T};v_{1}", 
@@ -337,7 +338,7 @@ VnUnit* GetResultsFromVnDeltaFiles(int isample, TFile* file, Bool_t isPtDiff, Bo
     double v2_err = 10;
     double v3_err = 10;
     double v4_err = 10;
-    if(isample > 0) {
+    if(isample >= 0) {
         if (useV1) hv1 = (TH1D*)file->Get(Form("Subsamples/hV1_subsample_%d", isample));
         hv2 = (TH1D*)file->Get(Form("Subsamples/hV2_subsample_%d", isample));
         hv3 = (TH1D*)file->Get(Form("Subsamples/hV3_subsample_%d", isample));

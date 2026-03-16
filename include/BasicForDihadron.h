@@ -62,7 +62,7 @@ std::map<int, std::string> DihadronCorrTypeName = {
 
 std::map<int, std::vector<float>> DihadrondEtaRange = {
     {kTPCFT0A,{-5.8, -2.6}}, 
-    {kTPCFT0C, {1.2, 3.5}}, 
+    {kTPCFT0C, {1.2, 3.8}}, 
     {kFT0AFT0C, {6., 7.2}},
     {kTPCTPC, {0.8, 0.8}}
 };

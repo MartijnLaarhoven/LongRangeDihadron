@@ -120,9 +120,9 @@ void Process_TemplateFit() {
     // {InputUnit("LHC25af_pass2_594019", kFT0AFT0C, 0, 20)}, 
     // "LHC25af_pass2_594019"));
     
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 0, 20)}, 
-    "LHC25af_pass2_623297"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_623297", kFT0AFT0C, 0, 20)}, 
+    // "LHC25af_pass2_623297"));
     
     // tpc-ft0a/c
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_622739", kTPCFT0A, 80, 100), 
@@ -133,43 +133,62 @@ void Process_TemplateFit() {
     // {InputUnit("LHC25af_pass2_622739", kTPCFT0C, 0, 20)}, 
     // "LHC25af_pass2_622739"));
     
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_623540", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25af_pass2_623540", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass2_623540"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_623540", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25af_pass2_623540", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_623540"));
     
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_623540", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25af_pass2_623540", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass2_623540"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_623540", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_623540", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_623540"));
 
     // O-O
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, 0, 20)}, 
-    "LHC25ae_pass2_623296"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_623296", kFT0AFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_623296"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 0, 20)}, 
-    "LHC25ae_pass2_623296"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_623296"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 0, 20)}, 
-    "LHC25ae_pass2_623296"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_623296"));
 
     // PtDiff processing for 3times2PC
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass2_623540", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25af_pass2_623540", kTPCFT0A, 0, 20)}, 
-    "LHC25af_pass2_623540"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass2_623540", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25af_pass2_623540", kTPCFT0A, 0, 20)}, 
+    // "LHC25af_pass2_623540"));
     
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass2_623540", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25af_pass2_623540", kTPCFT0C, 0, 20)}, 
-    "LHC25af_pass2_623540"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25af_pass2_623540", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25af_pass2_623540", kTPCFT0C, 0, 20)}, 
+    // "LHC25af_pass2_623540"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 80, 100), 
-    {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 0, 20)}, 
-    "LHC25ae_pass2_623296"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_623296", kTPCFT0A, 0, 20)}, 
+    // "LHC25ae_pass2_623296"));
 
-    configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 80, 100), 
-    {InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 0, 20)}, 
-    "LHC25ae_pass2_623296"));
+    // configList.push_back(ConfigUnit(kCent, kPtDiffOn, InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 80, 100), 
+    // {InputUnit("LHC25ae_pass2_623296", kTPCFT0C, 0, 20)}, 
+    // "LHC25ae_pass2_623296"));
+
+    // Nch-based template fit (template: Nch 0-10, signal: Nch 10-50)
+    configList.push_back(ConfigUnit(kNch, kPtDiffOff, InputUnit("LHC25ae_pass2_634100", kFT0AFT0C, 0, 10),
+    {InputUnit("LHC25ae_pass2_634100", kFT0AFT0C, 10, 50)},
+    "LHC25ae_pass2_634100"));
+    configList.push_back(ConfigUnit(kNch, kPtDiffOff, InputUnit("LHC25ae_pass2_634100", kTPCFT0A, 0, 10),
+    {InputUnit("LHC25ae_pass2_634100", kTPCFT0A, 10, 50)},
+    "LHC25ae_pass2_634100"));
+    configList.push_back(ConfigUnit(kNch, kPtDiffOff, InputUnit("LHC25ae_pass2_634100", kTPCFT0C, 0, 10),
+    {InputUnit("LHC25ae_pass2_634100", kTPCFT0C, 10, 50)},
+    "LHC25ae_pass2_634100"));
+    // PtDiff
+    configList.push_back(ConfigUnit(kNch, kPtDiffOn, InputUnit("LHC25ae_pass2_634100", kTPCFT0A, 0, 10),
+    {InputUnit("LHC25ae_pass2_634100", kTPCFT0A, 10, 50)},
+    "LHC25ae_pass2_634100"));
+    configList.push_back(ConfigUnit(kNch, kPtDiffOn, InputUnit("LHC25ae_pass2_634100", kTPCFT0C, 0, 10),
+    {InputUnit("LHC25ae_pass2_634100", kTPCFT0C, 10, 50)},
+    "LHC25ae_pass2_634100"));
+
     //innerring
     // configList.push_back(ConfigUnit(kCent, kPtDiffOff, InputUnit("LHC25af_pass2_594018", kFT0AFT0C, 80, 100), 
     // {InputUnit("LHC25af_pass2_594018", kFT0AFT0C, 0, 20)}, 
